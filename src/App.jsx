@@ -397,7 +397,7 @@ function App() {
           </div>
           <div className="today-dates today-hijri-side">
             <p className="today-hijri" lang="ar" dir="rtl">{hijriDate.arabic}</p>
-            <p className="today-hijri-english">{hijriDate.english}</p>
+            {/* <p className="today-hijri-english">{hijriDate.english}</p> */}
           </div>
         </section>
 
