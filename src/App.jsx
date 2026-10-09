@@ -110,12 +110,20 @@ function formatTime(date) {
   return new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(date);
 }
 
+function createHijriFormatter(locale, options) {
+  for (const calendar of ["islamic-umalqura", "islamic"]) {
+    const formatter = new Intl.DateTimeFormat(locale, { ...options, calendar });
+    if (formatter.resolvedOptions().calendar === calendar) return formatter;
+  }
+  throw new RangeError("This browser does not support an Islamic calendar.");
+}
+
 function useHijriDate(now) {
   const options = { day: "numeric", month: "long", year: "numeric" };
   try {
     return {
-      arabic: new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura", options).format(now),
-      english: new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", options).format(now)
+      arabic: createHijriFormatter("ar-SA", options).format(now),
+      english: createHijriFormatter("en", options).format(now)
     };
   } catch (error) {
     console.error("Could not format the Hijri date:", error);
