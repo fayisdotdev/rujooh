@@ -117,15 +117,10 @@ button { font: inherit; }
 }
 .header-progress::before { background: var(--green-900); }
 .header-progress strong { font-size: 20px; }
-.header-progress span {
-  max-width: calc(100% - 20px);
-  font-size: 8px;
-  line-height: 1.1;
-  text-align: center;
-}
+.header-progress span { font-size: 9px; }
 .header-progress:focus-visible,
 .location-button:focus-visible,
-.profile-close:focus-visible {
+.profile-close:focus-visible { 
   outline: 3px solid var(--gold);
   outline-offset: 3px;
 }
