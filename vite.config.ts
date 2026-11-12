@@ -5,4 +5,17 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   base: '/rujooh/',
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyRequest) => {
+            proxyRequest.removeHeader('origin')
+          })
+        },
+      },
+    },
+  },
 })

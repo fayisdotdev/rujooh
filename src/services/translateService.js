@@ -1,27 +1,48 @@
+function getApiBaseUrl() {
+  return (import.meta.env.VITE_TRANSLATION_PROXY_URL || '/api').replace(/\/$/, '');
+}
+
+async function requestJson(path, options) {
+  try {
+    return await fetch(`${getApiBaseUrl()}${path}`, options);
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error('Cannot reach the translation server. Start the app with npm run dev.');
+    }
+
+    throw error;
+  }
+}
+
+export async function getTranslationServiceStatus() {
+  const response = await requestJson('/health');
+  const payload = await response.json().catch(() => null);
+
+  if (!response.ok || !payload?.ok) {
+    throw new Error(payload?.error || 'The translation server is unavailable.');
+  }
+
+  return {
+    available: true,
+    configured: Boolean(payload.translationConfigured),
+  };
+}
+
 export async function translateText(text, targetLang = 'en') {
   const cleaned = (text || '').trim();
   if (!cleaned) return '';
 
-  const backendUrl = import.meta.env.VITE_TRANSLATION_PROXY_URL;
-  if (!backendUrl) {
-    throw new Error('Translation is not configured. Add a backend proxy URL to enable translation.');
-  }
-
-  const response = await fetch(`${backendUrl.replace(/\/$/, '')}/translate`, {
+  const response = await requestJson('/translate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      text: cleaned,
-      targetLang,
-      mode: 'formal-religious-arabic',
-    }),
+    body: JSON.stringify({ text: cleaned, targetLang }),
   });
 
+  const payload = await response.json().catch(() => null);
   if (!response.ok) {
-    throw new Error(`Translation request failed (${response.status}).`);
+    throw new Error(payload?.error || `Translation request failed (${response.status}).`);
   }
 
-  const payload = await response.json();
   if (!payload?.translation) {
     throw new Error('Translation service returned no translation.');
   }

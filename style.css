@@ -196,7 +196,7 @@ button { font: inherit; }
 .today-hijri-english {
   margin-top: 2px;
   color: rgba(255, 255, 255, .78);
-  font-size: 16zpx;
+  font-size: 16px;
   line-height: 1.35;
 }
 .today-hijri { color: rgba(255, 255, 255, .92); }
@@ -485,4 +485,62 @@ footer p { margin: 0 0 4px; }
   .today-strip { align-items: flex-start; padding: 12px 14px; }
   .today-gregorian { font-size: 13px; }
   .today-hijri, .today-hijri-english, .today-clock { font-size: 11px; }
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+  .topbar .header-tools {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .check-btn,
+  .dhikr-check {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .sunnah-chip,
+  .location-button,
+  .add-dhikr-btn {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .today-hijri,
+  .today-hijri-english,
+  .today-clock {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

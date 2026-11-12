@@ -24,10 +24,24 @@
   color: #fff;
 }
 
+.app-switcher button:focus-visible,
+.segmented-control button:focus-visible,
+.language-toggle button:focus-visible,
+.listener-controls button:focus-visible,
+.translation-warning button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.listener-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .listener-page-shell {
   max-width: 980px;
   margin: 0 auto;
-  padding: 16px 16px 48px;
+  padding: 16px 16px calc(48px + env(safe-area-inset-bottom));
 }
 
 .listener-shell {
@@ -148,6 +162,7 @@
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, #2fbf94, #a9d57d);
+  transition: width 90ms linear;
 }
 
 .listener-controls {
@@ -253,6 +268,22 @@
   gap: 10px;
 }
 
+.translation-service-status {
+  margin: -4px 0 10px;
+  color: var(--muted);
+  font-size: 0.82em;
+  line-height: 1.45;
+}
+
+.arabic-block .caption-text,
+.arabic-block .partial-text {
+  font-family: "Noto Naskh Arabic", "Amiri", "Times New Roman", serif;
+}
+
+.translation-block {
+  font-family: "Noto Sans Malayalam", system-ui, sans-serif;
+}
+
 .translation-item {
   background: rgba(20, 114, 94, 0.04);
   border-radius: 12px;
@@ -277,6 +308,32 @@
   color: var(--muted);
 }
 
+.translation-warning {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid rgba(146, 60, 30, 0.18);
+  border-radius: 12px;
+  background: #fff4ed;
+  color: #762f1b;
+  line-height: 1.5;
+}
+
+.translation-warning button {
+  flex: 0 0 auto;
+  min-height: 40px;
+  border: 1px solid currentColor;
+  border-radius: 9px;
+  padding: 7px 10px;
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .listener-footer {
   margin-top: 16px;
   display: flex;
@@ -291,38 +348,92 @@
 }
 
 @media (max-width: 700px) {
-  .topbar {
-    flex-wrap: wrap;
-    padding-top: 16px;
+  #root {
+    min-width: 320px;
+    overflow-x: clip;
   }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(251, 250, 245, 0.96);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(12px);
+  }
+
+  .brand { gap: 9px; }
+  .brand-mark { width: 40px; height: 40px; border-radius: 12px; }
 
   .header-tools {
     width: 100%;
     display: grid;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 
   .app-switcher {
     width: 100%;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .app-switcher button {
+    min-height: 44px;
+    padding: 8px 6px;
+  }
+
+  .header-prayer-info {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .location-button {
+    min-height: 44px;
+  }
+
+  .profile-control {
+    display: none;
+  }
+
+  .listener-page-shell {
+    padding: 8px 14px calc(32px + env(safe-area-inset-bottom));
   }
 
   .session-meta {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
   }
 
   .listener-shell {
-    padding: 14px;
+    padding: 6px 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   .listener-header {
     align-items: flex-start;
     flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .listener-header h2 {
+    font-size: clamp(1.55rem, 7vw, 2rem);
+    line-height: 1.15;
   }
 
   .listener-toolbar {
     align-items: stretch;
     flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
   }
 
   .segmented-control,
@@ -335,6 +446,7 @@
     justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
+    scroll-snap-type: x proximity;
   }
 
   .segmented-control::-webkit-scrollbar {
@@ -344,6 +456,7 @@
   .segmented-control button {
     flex: 0 0 auto;
     min-height: 44px;
+    scroll-snap-align: start;
   }
 
   .language-toggle button {
@@ -352,13 +465,23 @@
   }
 
   .listener-controls {
+    position: sticky;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    z-index: 12;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px;
+    margin-inline: -2px;
+    border: 1px solid rgba(7, 55, 44, 0.1);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: 0 8px 22px rgba(7, 55, 44, 0.06);
+    backdrop-filter: blur(12px);
   }
 
   .session-meta {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 7px;
+    margin-bottom: 10px;
   }
 
   .time-box,
@@ -375,15 +498,125 @@
 
   .meta-label {
     font-size: 9px;
+    letter-spacing: 0.04em;
   }
 
   .level-box small {
     font-size: 10px;
+    line-height: 1.2;
+  }
+
+  .status-box strong {
+    display: block;
+    overflow-wrap: anywhere;
+    font-size: 0.78rem;
   }
 
   .primary-button,
   .secondary-button,
   .ghost-button {
+    min-width: 0;
+    min-height: 46px;
     width: 100%;
+    padding: 10px 8px;
+    font-size: 0.88rem;
+  }
+
+  .listener-controls .primary-button,
+  .listener-controls .secondary-button,
+  .listener-controls .control-wide {
+    grid-column: span 2;
+  }
+
+  .listener-controls .font-control {
+    grid-column: span 1;
+    font-size: 1rem;
+  }
+
+  .privacy-note {
+    font-size: 0.82rem;
+  }
+
+  .caption-panel {
+    max-height: min(58vh, 520px);
+    margin-top: 12px;
+    gap: 10px;
+    overscroll-behavior: contain;
+    scroll-padding-bottom: 160px;
+  }
+
+  .caption-block {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .caption-text {
+    font-size: 1.16em;
+    line-height: 1.9;
+  }
+
+  .translation-warning {
+    flex-direction: column;
+  }
+
+  .translation-warning button {
+    width: 100%;
+  }
+
+  .listener-footer {
+    font-size: 0.8rem;
+  }
+
+  .prayer-card,
+  .adhkar-section {
+    padding: 15px;
+    border-radius: 16px;
+  }
+
+  .check-btn,
+  .dhikr-check {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+
+  .sunnah-chip,
+  .add-dhikr-btn {
+    min-height: 44px;
+  }
+
+  .today-strip {
+    gap: 8px;
+    padding: 12px 14px;
+    border-radius: 15px;
+  }
+
+  .today-gregorian {
+    font-size: 0.88rem;
+    overflow-wrap: anywhere;
+  }
+
+  .today-clock,
+  .today-hijri {
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .listener-page-shell { padding-inline: 10px; }
+  .listener-shell { font-size: 0.94rem; }
+  .session-meta { gap: 5px; }
+  .time-box, .level-box, .status-box { padding: 8px 6px; }
+  .caption-block { padding: 12px; }
+  .container { padding-inline: 12px; }
+  .topbar { padding-inline: 12px; }
+  .dhikr-row { grid-template-columns: 24px minmax(0, 1fr) 44px; gap: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-switcher button,
+  .meter-track span {
+    transition: none;
   }
 }

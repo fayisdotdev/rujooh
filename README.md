@@ -6,10 +6,14 @@ This project now includes a mobile-first Live Arabic Listener alongside the Rujo
 
 ```bash
 npm install
-npm run dev -- --host 0.0.0.0
+Copy-Item .env.example .env
+# Add your Anthropic API key to .env, then:
+npm run dev
 ```
 
-Open `http://localhost:5173/rujooh/` on the computer running Vite for a UI check. For phone microphone testing, open the Vite app through an HTTPS development tunnel or an HTTPS deployment.
+`npm run dev` starts the Vite app and the Express translation proxy. Open `http://localhost:5173/rujooh/` on the computer running Vite. Without `ANTHROPIC_API_KEY`, captions still work but translation will show a setup message instead of a network error.
+
+The backend key stays in `.env` and is never exposed to the browser. Do not commit `.env`.
 
 Important: microphone access requires a secure context. `http://localhost` works only on the same device running Vite; an `http://<your-local-ip>` network URL is not secure and will not expose microphone access on most phones. Use an HTTPS development tunnel or an HTTPS deployment to test on a phone. Safari and Chrome on iPhone/Android may require a browser permission prompt before speech capture works.
 
@@ -22,7 +26,7 @@ Copy `.env.example` to `.env` and fill in the backend values you need. Keep real
 - Start the app and switch to the Live listener tab.
 - Tap Start and allow mic access.
 - Confirm Arabic captions appear while you speak Arabic.
-- Change English / Malayalam from the toggle. Translation is not active until a backend translation proxy is configured.
+- Change English / Malayalam from the toggle. Translation requires a valid backend API key.
 - Use Pause and Stop to test the controls.
 - Keep the screen on to validate the Wake Lock notice behaviour.
 
