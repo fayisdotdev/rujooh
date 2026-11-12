@@ -476,7 +476,7 @@ function App() {
         </main>
       ) : (
         <main className="listener-page-shell">
-          <LiveListenerPanel initialPrefs={listenerPrefs} />
+          <LiveListenerPanel initialPrefs={listenerPrefs} onPrefsChange={setListenerPrefs} />
         </main>
       )}
     </>

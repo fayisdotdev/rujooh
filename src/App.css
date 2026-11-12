@@ -331,9 +331,54 @@
     justify-content: center;
   }
 
+  .segmented-control {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .segmented-control::-webkit-scrollbar {
+    display: none;
+  }
+
+  .segmented-control button {
+    flex: 0 0 auto;
+    min-height: 44px;
+  }
+
+  .language-toggle button {
+    min-height: 44px;
+    flex: 1;
+  }
+
   .listener-controls {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .session-meta {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .time-box,
+  .level-box,
+  .status-box {
+    min-width: 0;
+    padding: 10px 8px;
+  }
+
+  .time-box strong,
+  .status-box strong {
+    font-size: 1rem;
+  }
+
+  .meta-label {
+    font-size: 9px;
+  }
+
+  .level-box small {
+    font-size: 10px;
   }
 
   .primary-button,

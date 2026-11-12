@@ -27,18 +27,18 @@ function getSessionLabel(prefix, mode) {
   return `${prefix} · ${map[mode] || mode}`;
 }
 
-export function LiveListenerPanel({ initialPrefs }) {
+export function LiveListenerPanel({ initialPrefs, onPrefsChange }) {
   const [prefs, setPrefs] = useState(() => ({ ...DEFAULT_STATE, ...initialPrefs }));
   const [isListening, setIsListening] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const [partialText, setPartialText] = useState('');
   const [finalizedSegments, setFinalizedSegments] = useState([]);
   const [translationSegments, setTranslationSegments] = useState([]);
+  const [translationErrors, setTranslationErrors] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [sessionSeconds, setSessionSeconds] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
   const [scrollLocked, setScrollLocked] = useState(false);
-  const [translationPending, setTranslationPending] = useState(false);
+  const [translationPending, setTranslationPending] = useState(0);
   const panelRef = useRef(null);
   const timerRef = useRef(null);
   const streamRef = useRef(null);
@@ -61,14 +61,19 @@ export function LiveListenerPanel({ initialPrefs }) {
     onError: (message) => {
       setErrorMessage(message || 'Speech recognition could not start.');
       setIsListening(false);
-      setIsPaused(false);
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     },
     onStatus: (nextStatus) => {
-      const listeningState = nextStatus === 'Listening';
+      const listeningState = !['Ready', 'Paused', 'Stopped', 'Error'].includes(nextStatus);
       setIsListening(listeningState);
-      setIsPaused(nextStatus === 'Paused');
     },
   });
+
+  useEffect(() => () => {
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
+  }, []);
 
   useEffect(() => {
     if (!panelRef.current) return undefined;
@@ -84,7 +89,7 @@ export function LiveListenerPanel({ initialPrefs }) {
   }, []);
 
   useEffect(() => {
-    if (!isListening || isPaused) return undefined;
+    if (!isListening) return undefined;
 
     timerRef.current = window.setInterval(() => {
       setSessionSeconds((current) => current + 1);
@@ -95,22 +100,17 @@ export function LiveListenerPanel({ initialPrefs }) {
         window.clearInterval(timerRef.current);
       }
     };
-  }, [isListening, isPaused]);
+  }, [isListening]);
 
   useEffect(() => {
-    if (!isListening || isPaused) return undefined;
+    if (!isListening) return undefined;
 
     let cancelled = false;
 
     async function startLevelMeter() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        if (cancelled) {
-          stream.getTracks().forEach((track) => track.stop());
-          return;
-        }
-
-        streamRef.current = stream;
+        const stream = streamRef.current;
+        if (!stream) return;
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const analyser = audioContext.createAnalyser();
         const source = audioContext.createMediaStreamSource(stream);
@@ -124,7 +124,7 @@ export function LiveListenerPanel({ initialPrefs }) {
         const buffer = new Uint8Array(analyser.frequencyBinCount);
 
         const tick = () => {
-          if (!cancelled || !analyserRef.current) return;
+          if (cancelled || !analyserRef.current) return;
           analyser.getByteFrequencyData(buffer);
           const average = buffer.reduce((total, value) => total + value, 0) / buffer.length;
           setAudioLevel(Math.min(100, Math.round((average / 255) * 100)));
@@ -141,48 +141,60 @@ export function LiveListenerPanel({ initialPrefs }) {
 
     return () => {
       cancelled = true;
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
-        streamRef.current = null;
-      }
       if (audioContextRef.current) {
         audioContextRef.current.close().catch(() => undefined);
         audioContextRef.current = null;
       }
       analyserRef.current = null;
     };
-  }, [isListening, isPaused]);
+  }, [isListening]);
 
   useEffect(() => {
-    if (finalizedSegments.length === 0) return;
+    let active = true;
+    const translatedIds = new Set(translationSegments.map((segment) => segment.arabic));
+    const untranslated = finalizedSegments.filter((segment) => !translatedIds.has(segment));
+    if (untranslated.length === 0) return undefined;
 
-    const latest = finalizedSegments[finalizedSegments.length - 1];
-    setTranslationPending(true);
-
-    translateText(latest, prefs.targetLang)
-      .then((translatedText) => {
-        setTranslationSegments((previous) => {
-          const next = [...previous];
-          const item = {
-            id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-            arabic: latest,
-            translation: translatedText,
-            source: 'Automatic translation',
+    const timer = window.setTimeout(async () => {
+      setTranslationPending((count) => count + untranslated.length);
+      const results = await Promise.all(untranslated.map(async (arabic) => {
+        try {
+          const translation = await translateText(arabic, prefs.targetLang);
+          return { arabic, translation, error: '' };
+        } catch (error) {
+          return {
+            arabic,
+            translation: '',
+            error: error instanceof Error ? error.message : 'Translation unavailable.',
           };
-          next.push(item);
-          return next;
-        });
-      })
-      .catch(() => {
-        setTranslationSegments((previous) => [
-          ...previous,
-          { id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, arabic: latest, translation: 'Translation unavailable.', source: 'Automatic translation' },
-        ]);
-      })
-      .finally(() => {
-        setTranslationPending(false);
-      });
-  }, [finalizedSegments, prefs.targetLang]);
+        }
+      }));
+
+      setTranslationPending((count) => Math.max(0, count - untranslated.length));
+      if (!active) return;
+
+      setTranslationSegments((previous) => [
+        ...previous,
+        ...results
+          .filter((result) => result.translation)
+          .map((result) => ({
+            id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            arabic: result.arabic,
+            translation: result.translation,
+            source: 'Automatic translation',
+          })),
+      ]);
+      setTranslationErrors((previous) => [
+        ...previous,
+        ...results.filter((result) => result.error).map((result) => result.error),
+      ]);
+    }, 350);
+
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+    };
+  }, [finalizedSegments, prefs.targetLang, translationSegments]);
 
   useEffect(() => {
     if (!panelRef.current) return;
@@ -193,7 +205,8 @@ export function LiveListenerPanel({ initialPrefs }) {
 
   useEffect(() => {
     window.localStorage.setItem('rujooh-listener-prefs', JSON.stringify(prefs));
-  }, [prefs]);
+    onPrefsChange?.(prefs);
+  }, [onPrefsChange, prefs]);
 
   const formattedTime = useMemo(() => {
     const minutes = Math.floor(sessionSeconds / 60);
@@ -203,17 +216,69 @@ export function LiveListenerPanel({ initialPrefs }) {
 
   const startListening = () => {
     setErrorMessage('');
-    speech.start();
+    if (!speech.supported) {
+      setErrorMessage('Live captions are not supported in this browser. Try a supported version of Chrome or Safari.');
+      return;
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setErrorMessage('Microphone access requires a supported browser and a secure HTTPS connection.');
+      return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+        streamRef.current = stream;
+        speech.start();
+      })
+      .catch((error) => {
+        const message = error.name === 'NotAllowedError'
+          ? 'Microphone access was denied. Allow microphone access in browser settings and try again.'
+          : error.name === 'NotFoundError'
+            ? 'No microphone was found on this device.'
+            : 'Microphone access could not start. Check your browser permissions and secure connection.';
+        setErrorMessage(message);
+      });
   };
 
   const pauseListening = () => {
     speech.pause();
+    setIsListening(false);
+    releaseMicrophone();
+  };
+
+  const resumeListening = () => {
+    setErrorMessage('');
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setErrorMessage('Microphone access requires a supported browser and a secure HTTPS connection.');
+      return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+        streamRef.current = stream;
+        speech.resume();
+        setIsListening(true);
+      })
+      .catch((error) => {
+        const message = error.name === 'NotAllowedError'
+          ? 'Microphone access was denied. Allow microphone access in browser settings and try again.'
+          : error.name === 'NotFoundError'
+            ? 'No microphone was found on this device.'
+            : 'Microphone access could not restart. Check your browser permissions and secure connection.';
+        setErrorMessage(message);
+      });
+  };
+
+  const releaseMicrophone = () => {
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
   };
 
   const stopListening = () => {
     speech.stop();
     setIsListening(false);
-    setIsPaused(false);
+    releaseMicrophone();
   };
 
   return (
@@ -279,7 +344,11 @@ export function LiveListenerPanel({ initialPrefs }) {
 
       <div className="listener-controls">
         {!isListening ? (
+          speech.status === 'Paused' ? (
+            <button type="button" className="primary-button" onClick={resumeListening}>Resume</button>
+          ) : (
           <button type="button" className="primary-button" onClick={startListening}>Start</button>
+          )
         ) : (
           <button type="button" className="secondary-button" onClick={pauseListening}>Pause</button>
         )}
@@ -309,7 +378,7 @@ export function LiveListenerPanel({ initialPrefs }) {
       </div>
 
       <div className="privacy-note">
-        <strong>Privacy note:</strong> audio stays on your device, and only text snippets are sent to the translation backend when enabled.
+        <strong>Privacy note:</strong> no audio is stored by this feature. Web Speech may process audio through your browser provider; check its privacy policy. A translation backend is not configured yet, so translation is unavailable.
       </div>
 
       {errorMessage && <div className="error-banner">{errorMessage}</div>}
@@ -336,6 +405,11 @@ export function LiveListenerPanel({ initialPrefs }) {
               : 'Automatic translation appears here as speech is finalized.'}
           </div>
           {translationPending && <small className="translation-pending">Translating final segment…</small>}
+          {translationErrors.length > 0 && (
+            <div className="translation-warning" role="status">
+              {translationErrors[translationErrors.length - 1]}
+            </div>
+          )}
         </div>
       </div>
 

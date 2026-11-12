@@ -11,8 +11,13 @@ export function useSpeechToText({
   onStatus,
 }) {
   const providerRef = useRef(null);
+  const callbacksRef = useRef({ onPartial, onFinal, onError, onStatus });
   const [supported, setSupported] = useState(true);
   const [status, setStatus] = useState('Ready');
+
+  useEffect(() => {
+    callbacksRef.current = { onPartial, onFinal, onError, onStatus };
+  }, [onError, onFinal, onPartial, onStatus]);
 
   const stopProvider = useCallback(() => {
     providerRef.current?.stop?.();
@@ -21,16 +26,16 @@ export function useSpeechToText({
   useEffect(() => {
     const config = {
       lang,
-      onPartial,
-      onFinal,
       onError: (message) => {
         setStatus('Error');
-        onError?.(message);
+        callbacksRef.current.onError?.(message);
       },
       onStateChange: (nextStatus) => {
         setStatus(nextStatus);
-        onStatus?.(nextStatus);
+        callbacksRef.current.onStatus?.(nextStatus);
       },
+      onPartial: (value) => callbacksRef.current.onPartial?.(value),
+      onFinal: (value) => callbacksRef.current.onFinal?.(value),
     };
 
     if (provider === STT_PROVIDER_TYPES.deepgram) {
@@ -50,17 +55,17 @@ export function useSpeechToText({
     return () => {
       providerRef.current?.destroy?.();
     };
-  }, [lang, onError, onFinal, onPartial, onStatus, provider]);
+  }, [lang, provider]);
 
   const start = useCallback(() => {
     if (!providerRef.current) {
-      onError?.('Speech recognition is not available.');
+      callbacksRef.current.onError?.('Speech recognition is not available.');
       return;
     }
 
     setStatus('Listening');
     providerRef.current.start();
-  }, [onError]);
+  }, []);
 
   const pause = useCallback(() => {
     providerRef.current?.pause?.();
