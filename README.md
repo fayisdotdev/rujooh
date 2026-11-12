@@ -1,75 +1,34 @@
-# React + TypeScript + Vite
+# Rujooh React App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project now includes a mobile-first Live Arabic Listener alongside the Rujooh prayer tracker.
 
-Currently, two official plugins are available:
+## Local development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev -- --host 0.0.0.0
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Open the device URL shown in the terminal (for example `http://<your-local-ip>:5173/rujooh/`) on your phone while connected to the same Wi‑Fi network.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Important: microphone access requires a secure context, so use `vite --host` and a network URL rather than a plain file:// page. Safari and Chrome on iPhone/Android may require a browser permission prompt before speech capture works.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Environment variables
 
-```
+Copy `.env.example` to `.env` and fill in the backend values you need. Keep real secrets only on the backend. The frontend should not contain API keys.
+
+## Mobile testing checklist
+
+- Start the app and switch to the Live listener tab.
+- Tap Start and allow mic access.
+- Confirm Arabic captions appear while you speak Arabic.
+- Change English / Malayalam from the toggle and expect the translation panel to update after final segments are captured.
+- Use Pause and Stop to test the controls.
+- Keep the screen on to validate the Wake Lock notice behaviour.
+
+## Browser limitations to expect
+
+- Web Speech is the default provider and is not supported uniformly across all browsers.
+- iOS Safari often needs permission on first use and may restart recognition more aggressively.
+- Some devices cannot share the same microphone stream between SpeechRecognition and MediaRecorder cleanly; the app will degrade gracefully by showing the live caption state and warning in the UI.
+- Wake Lock is optional and may be unavailable on some devices.
