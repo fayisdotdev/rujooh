@@ -1,8 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-import { LiveListenerPanel } from "./components/LiveListenerPanel";
-import "./App.css";
-
 const prayers = [
   { id: "fajr", name: "Fajr", arabic: "الفجر", icon: "☀", sunnah: [{ id: "fajr-before", label: "2 rak'ah before Fajr" }] },
   { id: "dhuhr", name: "Dhuhr", arabic: "الظهر", icon: "◉", sunnah: [{ id: "dhuhr-before-4", label: "4 rak'ah before Dhuhr" }, { id: "dhuhr-after-2", label: "2 rak'ah after Dhuhr" }] },
@@ -22,7 +19,6 @@ const adhkar = [
 ];
 
 const STORAGE_KEY = "rujooh-tracker-v1";
-const LISTENER_PREFS_KEY = "rujooh-listener-prefs";
 
 function dateKey(date = new Date()) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
@@ -48,16 +44,6 @@ function loadState() {
   } catch (error) {
     console.error("Could not load rujooh data:", error);
     return defaultState();
-  }
-}
-
-function loadListenerPrefs() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(LISTENER_PREFS_KEY));
-    return saved || { mode: "khutba", targetLang: "en", fontScale: 1, autoScroll: true };
-  } catch (error) {
-    console.error("Could not load listener settings:", error);
-    return { mode: "khutba", targetLang: "en", fontScale: 1, autoScroll: true };
   }
 }
 
@@ -246,8 +232,6 @@ function App() {
   const [requestingLocation, setRequestingLocation] = useState(false);
   const locationRequestedOnLoad = useRef(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [activeView, setActiveView] = useState("tracker");
-  const [listenerPrefs, setListenerPrefs] = useState(loadListenerPrefs);
   const hijriDate = useHijriDate(now);
 
   useEffect(() => {
@@ -257,14 +241,6 @@ function App() {
       console.error("Could not save rujooh data:", error);
     }
   }, [state]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(LISTENER_PREFS_KEY, JSON.stringify(listenerPrefs));
-    } catch (error) {
-      console.error("Could not save listener settings:", error);
-    }
-  }, [listenerPrefs]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -363,64 +339,54 @@ function App() {
         </div>
 
         <div className="header-tools">
-          <div className="app-switcher" aria-label="App sections">
-            <button type="button" className={activeView === "tracker" ? "active" : ""} onClick={() => setActiveView("tracker")}>Prayer tracker</button>
-            <button type="button" className={activeView === "listener" ? "active" : ""} onClick={() => setActiveView("listener")}>Live listener</button>
+          <div className="header-prayer-info" aria-live="polite">
+            <div className="header-next-prayer">
+              <span className="header-label">Next prayer</span>
+              <strong>{schedule?.upcoming
+                ? `${schedule.upcoming.name} · ${formatTime(schedule.upcoming.time)}`
+                : "Allow location to calculate"}</strong>
+            </div>
+            <div className="header-location">
+              <span className="header-label">Location</span>
+              <strong>{coordinates
+                ? `${coordinates.latitude.toFixed(2)}°, ${coordinates.longitude.toFixed(2)}°`
+                : "Not detected"}</strong>
+            </div>
+            <button className="location-button" type="button" onClick={requestLocation} disabled={requestingLocation}>
+              {requestingLocation ? "Getting location…" : coordinates ? "Update location" : "Use my location"}
+            </button>
+            <small className="header-location-status">{locationStatus}</small>
           </div>
-
-          {activeView === "tracker" && (
-            <>
-              <div className="header-prayer-info" aria-live="polite">
-                <div className="header-next-prayer">
-                  <span className="header-label">Next prayer</span>
-                  <strong>{schedule?.upcoming
-                    ? `${schedule.upcoming.name} · ${formatTime(schedule.upcoming.time)}`
-                    : "Allow location to calculate"}</strong>
+          <div className="profile-control">
+            <button
+              className="progress-ring header-progress"
+              type="button"
+              aria-label={`Day ${elapsedPercent}% elapsed. Show profile`}
+              aria-expanded={profileOpen}
+              aria-controls="profilePopover"
+              style={{ "--day-progress": `${elapsedPercent * 3.6}deg` }}
+              onClick={() => setProfileOpen(open => !open)}
+            >
+              <strong>{elapsedPercent}%</strong>
+              <span>day elapsed</span>
+            </button>
+            {profileOpen && (
+              <section className="profile-popover" id="profilePopover" aria-label="Profile">
+                <div className="profile-popover-heading">
+                  <strong>Profile</strong>
+                  <button type="button" className="profile-close" onClick={() => setProfileOpen(false)} aria-label="Close profile">×</button>
                 </div>
-                <div className="header-location">
-                  <span className="header-label">Location</span>
-                  <strong>{coordinates
-                    ? `${coordinates.latitude.toFixed(2)}°, ${coordinates.longitude.toFixed(2)}°`
-                    : "Not detected"}</strong>
-                </div>
-                <button className="location-button" type="button" onClick={requestLocation} disabled={requestingLocation}>
-                  {requestingLocation ? "Getting location…" : coordinates ? "Update location" : "Use my location"}
-                </button>
-                <small className="header-location-status">{locationStatus}</small>
-              </div>
-              <div className="profile-control">
-                <button
-                  className="progress-ring header-progress"
-                  type="button"
-                  aria-label={`Day ${elapsedPercent}% elapsed. Show profile`}
-                  aria-expanded={profileOpen}
-                  aria-controls="profilePopover"
-                  style={{ "--day-progress": `${elapsedPercent * 3.6}deg` }}
-                  onClick={() => setProfileOpen(open => !open)}
-                >
-                  <strong>{elapsedPercent}%</strong>
-                  <span>day elapsed</span>
-                </button>
-                {profileOpen && (
-                  <section className="profile-popover" id="profilePopover" aria-label="Profile">
-                    <div className="profile-popover-heading">
-                      <strong>Profile</strong>
-                      <button type="button" className="profile-close" onClick={() => setProfileOpen(false)} aria-label="Close profile">×</button>
-                    </div>
-                    <p>Your Rujooh tracker is saved privately in this browser.</p>
-                    <small>{coordinates
-                      ? `Prayer times are calculated locally for ${coordinates.latitude.toFixed(2)}°, ${coordinates.longitude.toFixed(2)}°.`
-                      : "Allow location access to calculate your local prayer times."}</small>
-                  </section>
-                )}
-              </div>
-            </>
-          )}
+                <p>Your Rujooh tracker is saved privately in this browser.</p>
+                <small>{coordinates
+                  ? `Prayer times are calculated locally for ${coordinates.latitude.toFixed(2)}°, ${coordinates.longitude.toFixed(2)}°.`
+                  : "Allow location access to calculate your local prayer times."}</small>
+              </section>
+            )}
+          </div>
         </div>
       </header>
 
-      {activeView === "tracker" ? (
-        <main className="container">
+      <main className="container">
           <section className="today-strip" aria-label="Today's date and time">
             <div className="today-dates today-gregorian-side">
               <p className="today-gregorian">{new Intl.DateTimeFormat(undefined, {
@@ -473,12 +439,7 @@ function App() {
           <footer>
             <p>rujooh • A simple personal salah tracker</p>
           </footer>
-        </main>
-      ) : (
-        <main className="listener-page-shell">
-          <LiveListenerPanel initialPrefs={listenerPrefs} onPrefsChange={setListenerPrefs} />
-        </main>
-      )}
+      </main>
     </>
   );
 }
