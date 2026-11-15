@@ -224,8 +224,9 @@ h1, h2, h3, p { margin-top: 0; }
   text-align: left;
   cursor: pointer;
 }
-.prayer-disclosure:hover .prayer-symbol { background: #e2f1e9; }
+.prayer-disclosure:hover .prayer-symbol { background: var(--green-100); }
 .prayer-disclosure.completed .prayer-symbol { color: white; background: var(--green-700); font-family: inherit; font-size: 15px; }
+:root[data-theme="dark"] .prayer-disclosure.completed .prayer-symbol { background: var(--green-800); }
 .expand-prayer-button {
   width: 40px;
   height: 40px;
@@ -261,6 +262,7 @@ h1, h2, h3, p { margin-top: 0; }
 .prayer-name small { margin-top: 2px; color: var(--muted); font-size: 12px; }
 .prayer-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 9px; }
 .prayer-meta .prayer-time { color: var(--green-800); font-weight: 700; }
+:root[data-theme="dark"] .prayer-meta .prayer-time { color: #b7e5d2; }
 .prayer-meta .prayer-period { color: var(--green-700); font-size: 10px; font-weight: 700; }
 .disclosure-mark { margin-left: auto; color: var(--green-700); font-size: 23px; font-weight: 400; line-height: 1; }
 .status-select-label { flex: 0 0 auto; }
@@ -287,6 +289,11 @@ h1, h2, h3, p { margin-top: 0; }
 :root[data-theme="dark"] .status-qasr { color: #d0cdf4; background: #302f48; }
 :root[data-theme="dark"] .status-qadha { color: #e6d092; background: #3b3320; }
 :root[data-theme="dark"] .status-missed { color: #efb4b1; background: #412727; }
+:root[data-theme="dark"] .status-on-time { border-color: #39614e; }
+:root[data-theme="dark"] .status-jama { border-color: #356158; }
+:root[data-theme="dark"] .status-qasr { border-color: #55527a; }
+:root[data-theme="dark"] .status-qadha { border-color: #66572f; }
+:root[data-theme="dark"] .status-missed { border-color: #704442; }
 .prayer-details { padding: 2px 18px 17px 64px; }
 .subsection-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 8px 0; color: var(--muted); font-size: 11px; font-weight: 700; }
 .subsection-title span:last-child { font-size: 10px; font-weight: 500; }
@@ -308,6 +315,7 @@ h1, h2, h3, p { margin-top: 0; }
 }
 .sunnah-item.done { color: var(--green-900); border-color: #bad8ca; background: var(--green-50); }
 :root[data-theme="dark"] .sunnah-item.done { color: #b7e5d2; }
+:root[data-theme="dark"] .sunnah-item.done { border-color: #39614e; }
 .empty-sunnah { margin: 0; padding: 10px 0; color: var(--muted); font-size: 12px; }
 .small-check, .habit-check {
   width: 19px;
@@ -323,6 +331,10 @@ h1, h2, h3, p { margin-top: 0; }
   font-weight: 700;
 }
 .sunnah-item.done .small-check, .habit-toggle.done .habit-check { border-color: var(--green-700); background: var(--green-700); }
+:root[data-theme="dark"] .small-check, :root[data-theme="dark"] .habit-check { border-color: #46564d; }
+:root[data-theme="dark"] .sunnah-item.done .small-check,
+:root[data-theme="dark"] .habit-toggle.done .habit-check,
+:root[data-theme="dark"] .dhikr-check[aria-pressed="true"] { border-color: var(--green-800); background: var(--green-800); }
 .sunnah-state { margin-left: auto; color: var(--muted); font-size: 10px; }
 .prayer-adhkar { margin-top: 15px; padding-top: 8px; border-top: 1px solid var(--line); }
 .custom-dhikr { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 12px; line-height: 1.5; }
@@ -331,6 +343,7 @@ h1, h2, h3, p { margin-top: 0; }
 .custom-dhikr.done > span { color: var(--muted); text-decoration: line-through; }
 .dhikr-check { width: 32px; height: 32px; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 9px; color: transparent; background: var(--paper); cursor: pointer; }
 .dhikr-check[aria-pressed="true"] { border-color: var(--green-700); color: white; background: var(--green-700); }
+:root[data-theme="dark"] .dhikr-check[aria-pressed="true"] { border-color: var(--green-800); background: var(--green-800); }
 .add-dhikr-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; margin-top: 9px; }
 .add-dhikr-form textarea, .add-dhikr-form input { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--paper); font-size: 12px; }
 .add-dhikr-form textarea { grid-column: 1 / -1; resize: vertical; }
@@ -355,15 +368,18 @@ h1, h2, h3, p { margin-top: 0; }
   cursor: pointer;
 }
 .habit-toggle.done { border-color: #bad8ca; background: var(--green-50); }
+:root[data-theme="dark"] .habit-toggle.done { border-color: #39614e; }
 .habit-check { width: 21px; height: 21px; border-radius: 7px; }
 .habit-copy { display: grid; gap: 3px; }
 .habit-copy strong { font-size: 13px; }
 .habit-copy small { color: var(--muted); font-size: 11px; }
 .habit-state { margin-left: auto; color: var(--muted); font-size: 10px; }
 .habit-toggle.done .habit-state { color: var(--green-800); font-weight: 700; }
+:root[data-theme="dark"] .habit-toggle.done .habit-state { color: #b7e5d2; }
 
 .adhkar-section { padding: 18px; }
 .completion-badge { padding: 6px 10px; border-radius: 99px; color: var(--green-900); background: var(--green-100); font-size: 11px; font-weight: 700; white-space: nowrap; }
+:root[data-theme="dark"] .completion-badge { color: #b7e5d2; }
 .adhkar-list { display: grid; gap: 6px; }
 .dhikr-row { display: grid; grid-template-columns: 28px minmax(0, 1fr) 36px; align-items: center; gap: 10px; padding: 8px; border-radius: 10px; }
 .dhikr-row.done { background: var(--green-50); }
@@ -410,6 +426,8 @@ h1, h2, h3, p { margin-top: 0; }
 .calendar-day.is-selected { outline: 2px solid var(--green-700); outline-offset: 1px; }
 :root[data-theme="dark"] .calendar-day.complete { color: #b9e2ca; background: #203d30; }
 :root[data-theme="dark"] .calendar-day.partial { color: #e9d59a; background: #3b3421; }
+:root[data-theme="dark"] .calendar-day.complete { border-color: #436754; }
+:root[data-theme="dark"] .calendar-day.partial { border-color: #65562f; }
 .calendar-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
 .calendar-legend span, .status-breakdown-row > span { display: inline-flex; align-items: center; gap: 6px; }
 .legend-dot { width: 9px; height: 9px; display: inline-block; border-radius: 50%; background: #b8c2bc; }
