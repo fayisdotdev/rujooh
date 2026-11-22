@@ -73,8 +73,9 @@ const adhkarGuide = [
       {
         id: "guide-ayatul-kursi",
         title: "Ayat al-Kursi · Quran 2:255",
-        transliteration: "Recite Ayat al-Kursi once. Open the source guide for the complete Arabic and meaning.",
-        meaning: "The Throne Verse. The PDF includes its full Arabic, transliteration, meaning, and a source note.",
+        arabic: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+        transliteration: "Allahu la ilaha illa huwa, al-Hayyu al-Qayyum. La ta'khudhuhu sinatun wa la nawm. Lahu ma fi as-samawati wa ma fil-ard. Man dha alladhi yashfa'u 'indahu illa bi-idhnih. Ya'lamu ma bayna aydihim wa ma khalfahum. Wa la yuhituna bi shay'in min 'ilmihi illa bima sha'a. Wasi'a kursiyyuhu as-samawati wal-ard. Wa la ya'uduhu hifdhuhuma. Wa huwal-'Aliyyul-'Azim.",
+        meaning: "Allah, there is no deity except Him, the Ever-Living, the Sustainer of all existence. Neither drowsiness nor sleep overtakes Him. To Him belongs whatever is in the heavens and whatever is on the earth. Who can intercede with Him except by His permission? He knows what is before them and what is behind them, and they encompass nothing of His knowledge except what He wills. His Seat extends over the heavens and the earth, and preserving them does not burden Him. And He is the Most High, the Most Great.",
         target: 1
       }
     ]
@@ -224,8 +225,9 @@ const adhkarGuide = [
       {
         id: "guide-last-verses",
         title: "Last two verses of Al-Baqarah · Quran 2:285–286",
-        transliteration: "Recite the last two verses of Surah Al-Baqarah. Open the source guide for the complete Arabic and meaning.",
-        meaning: "The guide places these verses before sleep and includes the full Arabic, meaning, and a source note.",
+        arabic: "آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ ۚ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ\nلَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
+        transliteration: "Amana ar-rasulu bima unzila ilayhi min rabbihi wal-mu'minun. Kullun amana billahi wa mala'ikatihi wa kutubihi wa rusulih. La nufarriqu bayna ahadin min rusulih. Wa qalu sami'na wa ata'na, ghufranaka rabbana wa ilaykal-masir.\nLa yukallifu Allahu nafsan illa wus'aha. Laha ma kasabat wa 'alayha mak-tasabat. Rabbana la tu'akhidhna in nasina aw akhta'na. Rabbana wa la tahmil 'alayna isran kama hamaltahu 'ala alladhina min qablina. Rabbana wa la tuhammilna ma la taqata lana bih. Wa'fu 'anna waghfir lana warhamna. Anta mawlana fansurna 'alal-qawmil-kafirin.",
+        meaning: "The Messenger believes in what was sent down to him from his Lord, and so do the believers. Each one believes in Allah, His angels, His books, and His messengers. \"We make no distinction between any of His messengers.\" And they say, \"We hear and we obey. Our Lord, grant us Your forgiveness, and to You is the final return.\"\nAllah does not burden a soul beyond its capacity. It gets what it has earned, and bears what it has brought upon itself. \"Our Lord, do not hold us accountable if we forget or make mistakes. Our Lord, do not place on us a burden like the one You placed on those before us. Our Lord, do not impose on us what we have no ability to bear. Pardon us, forgive us, and have mercy on us. You are our Protector, so grant us victory over the disbelieving people.\"",
         target: 1
       }
     ]
