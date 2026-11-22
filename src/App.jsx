@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 const prayers = [
   { id: "fajr", name: "Fajr", arabic: "الفجر", sunnah: [{ id: "fajr-before", position: "before", minimum: 2, maximum: 2 }] },
@@ -12,18 +12,8 @@ const dailyHabits = [
   { id: "quran", label: "Quran recitation", hint: "Read or reflect today" }
 ];
 const nightPrayerHabits = [
-  { id: "tahajjud", label: "Tahajjud", hint: "Night prayer" },
-  { id: "witr", label: "Witr", hint: "Night prayer" }
-];
-
-const dailyDhikr = [
-  { id: "astaghfirullah", text: "Astaghfirullah × 3", count: "3x" },
-  { id: "allahumma-antas-salam", text: "Allahumma antas-salam wa minkas-salam...", count: "1x" },
-  { id: "subhanallah", text: "SubhanAllah", count: "33x" },
-  { id: "alhamdulillah", text: "Alhamdulillah", count: "33x" },
-  { id: "allahu-akbar", text: "Allahu Akbar", count: "33x" },
-  { id: "la-ilaha", text: "La ilaha illallahu wahdahu la sharika lah...", count: "1x" },
-  { id: "ayatul-kursi", text: "Ayatul Kursi", count: "1x" }
+  { id: "tahajjud", prayerId: "fajr", label: "Tahajjud", hint: "Night prayer" },
+  { id: "witr", prayerId: "isha", label: "Witr", hint: "Night prayer" }
 ];
 
 const adhkarGuide = [
@@ -41,19 +31,11 @@ const adhkarGuide = [
         target: 3
       },
       {
-        id: "guide-salam",
-        title: "Allahumma antas-salam",
-        arabic: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ",
-        transliteration: "Allahumma antas-salam wa minkas-salam, tabarakta ya dhal-jalali wal-ikram",
-        meaning: "O Allah, You are Peace and from You comes peace. Blessed are You, O Possessor of Majesty and Honour.",
-        target: 1
-      },
-      {
-        id: "guide-dhikr-help",
-        title: "Ask for help in worship",
-        arabic: "اللَّهُمَّ أَعِنِّي عَلَىٰ ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
-        transliteration: "Allahumma a'inni 'ala dhikrika wa shukrika wa husni 'ibadatik",
-        meaning: "O Allah, help me to remember You, to thank You, and to worship You in the best way.",
+        id: "guide-salam-worship",
+        title: "Peace and help in worship",
+        arabic: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ وَإِلَيْكَ يَرْجِعُ السَّلَامُ، حَيِّنَا رَبَّنَا بِالسَّلَامِ، تَبَارَكْتَ رَبَّنَا وَتَعَالَيْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ\nاللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ وَتَوْفِيقِ طَاعَتِكَ وَإِيمَانِكَ يَا اللَّهُ\nاللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْجُبْنِ وَأَعُوذُ بِكَ مِنَ الْبُخْلِ وَأَعُوذُ بِكَ مِنْ أَرْذَلِ الْعُمُرِ وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الدُّنْيَا وَعَذَابِ الْقَبْرِ",
+        transliteration: "Allāhumma antas-salām wa minkas-salām wa ilayka yarji'us-salām, ḥayyinā rabbanā bis-salām, tabārakta rabbanā wa ta'ālayta yā dhal-jalāli wal-ikrām.\nAllāhumma a'innī 'alā dhikrika wa shukrika wa ḥusni 'ibādatika wa tawfīqi ṭā'atika wa īmānika yā Allāh.\nAllāhumma innī a'ūdhu bika minal-jubni wa a'ūdhu bika minal-bukhli wa a'ūdhu bika min ardhali al-'umuri wa a'ūdhu bika min fitnatid-dunyā wa 'adhābil-qabr.",
+        meaning: "O Allah, You are Peace and from You comes peace, and to You peace returns; grant us life, our Lord, in peace. Blessed are You, our Lord, and Exalted, O Possessor of Majesty and Honor.\nO Allah, help me to remember You, thank You, worship You well, and grant me success in obeying You and holding firm to faith in You, O Allah.\nO Allah, I seek refuge in You from cowardice, stinginess, reaching the feeblest stage of old age, the trials of this world, and the punishment of the grave.",
         target: 1
       },
       {
@@ -156,9 +138,9 @@ const adhkarGuide = [
       {
         id: "guide-dua-wellbeing",
         title: "Ask for wellbeing",
-        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ",
-        transliteration: "Allahumma inni as'alukal-'afiyah",
-        meaning: "O Allah, I ask You for wellbeing, health, and safety.",
+        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ حُسْنَ الْعَافِيَةِ",
+        transliteration: "Allahumma inni as'aluka husna al-'afiyah",
+        meaning: "O Allah, I ask You for the best of well-being.",
         target: 1
       },
       {
@@ -255,9 +237,9 @@ const fardhIds = prayers.map((prayer) => prayer.id);
 const statusOptions = [
   { id: "pending", label: "Pending" },
   { id: "on-time", label: "Done" },
+  { id: "qadha", label: "Qadha" },
   { id: "jama", label: "Jama'" },
   { id: "qasr", label: "Qasr" },
-  { id: "qadha", label: "Qadha" },
   { id: "missed", label: "Missed" }
 ];
 const fulfilledStatuses = new Set(["on-time", "jama", "qasr"]);
@@ -340,6 +322,14 @@ function normalizeDay(value) {
   }
   if (habits.witr === undefined && typeof sunnah.witr === "boolean") habits.witr = sunnah.witr;
   delete sunnah.witr;
+  const guideCounts = normalizeCountMap(value.guideCounts);
+  if (guideCounts["guide-salam-worship"] === undefined
+    && guideCounts["guide-salam"] >= 1
+    && guideCounts["guide-dhikr-help"] >= 1) {
+    guideCounts["guide-salam-worship"] = 1;
+  }
+  delete guideCounts["guide-salam"];
+  delete guideCounts["guide-dhikr-help"];
   return {
     fardh,
     sunnah,
@@ -347,7 +337,7 @@ function normalizeDay(value) {
     customAdhkar,
     customAdhkarDone: normalizeBooleanMap(value.customAdhkarDone),
     habits,
-    guideCounts: normalizeCountMap(value.guideCounts),
+    guideCounts,
     guideDone: normalizeBooleanMap(value.guideDone)
   };
 }
@@ -497,6 +487,12 @@ function sunnahCount(prayer, position, preference) {
 }
 
 function GuideDhikrCard({ item, count, done, onIncrement, onDecrement, onMark }) {
+  const [showTransliteration, setShowTransliteration] = useState(false);
+  const [showTranslation, setShowTranslation] = useState(false);
+  const transliterationId = `guide-transliteration-${item.id}`;
+  const translationId = `guide-translation-${item.id}`;
+  const hasTextDetails = item.transliteration || item.meaning;
+
   return (
     <article className={`guide-item ${done ? "done" : ""}`}>
       <div className="guide-item-heading">
@@ -506,8 +502,44 @@ function GuideDhikrCard({ item, count, done, onIncrement, onDecrement, onMark })
         </div>
         {done && <span className="guide-done-badge">Done</span>}
       </div>
-      <p className="guide-transliteration" dir="auto">{item.transliteration}</p>
-      <p className="guide-meaning">{item.meaning}</p>
+      {hasTextDetails && (
+        <>
+          <div className="guide-text-toggles">
+            {item.transliteration && (
+              <button
+                className="guide-text-toggle"
+                type="button"
+                aria-expanded={showTransliteration}
+                aria-controls={transliterationId}
+                onClick={() => setShowTransliteration((shown) => !shown)}
+              >
+                {showTransliteration ? "Hide" : "Show"} transliteration
+              </button>
+            )}
+            {item.meaning && (
+              <button
+                className="guide-text-toggle"
+                type="button"
+                aria-expanded={showTranslation}
+                aria-controls={translationId}
+                onClick={() => setShowTranslation((shown) => !shown)}
+              >
+                {showTranslation ? "Hide" : "Show"} translation
+              </button>
+            )}
+          </div>
+          {item.transliteration && (
+            <p className="guide-transliteration" id={transliterationId} dir="auto" hidden={!showTransliteration}>
+              {item.transliteration}
+            </p>
+          )}
+          {item.meaning && (
+            <p className="guide-meaning" id={translationId} hidden={!showTranslation}>
+              {item.meaning}
+            </p>
+          )}
+        </>
+      )}
       {item.note && <p className="guide-note">{item.note}</p>}
       {item.target === null ? (
         <button className="guide-mark-button" type="button" aria-pressed={done} onClick={onMark}>
@@ -538,25 +570,15 @@ function getStreak(days, today) {
   return streak;
 }
 
-function PrayerCard({ prayer, day, expanded, active, upcoming, time, sunnahPreference, onExpand, onStatusChange, onToggle, onAddAdhkar }) {
-  const prayerAdhkar = day.customAdhkar.filter((item) => item.prayerId === prayer.id);
+function PrayerCard({ prayer, day, habit, expanded, active, upcoming, time, sunnahPreference, onExpand, onStatusChange, onToggle }) {
   const sunnahItems = prayer.sunnah.filter((item) => item[sunnahPreference] > 0);
+  const selectedSunnahCount = prayer.sunnah.reduce((total, item) => total + item[sunnahPreference], 0);
   const currentStatus = day.fardh[prayer.id] || "pending";
   const completed = isFulfilled(currentStatus);
   function cycleStatus() {
     const currentIndex = statusOptions.findIndex((option) => option.id === currentStatus);
     const nextIndex = (currentIndex + 1) % statusOptions.length;
     onStatusChange(prayer.id, statusOptions[nextIndex].id);
-  }
-
-  function handleAdd(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const text = form.elements.text.value.trim();
-    const count = form.elements.count.value.trim();
-    if (!text) return;
-    onAddAdhkar(prayer.id, text, count);
-    form.reset();
   }
 
   return (
@@ -582,6 +604,7 @@ function PrayerCard({ prayer, day, expanded, active, upcoming, time, sunnahPrefe
               {time && <small className="prayer-time">{formatTime(time)}</small>}
               {active && <small className="prayer-period">Current period</small>}
               {upcoming && <small className="prayer-period">Up next</small>}
+              <small className="prayer-sunnah-summary">{selectedSunnahCount} rak'ah Sunnah</small>
             </span>
           </span>
         </button>
@@ -604,8 +627,10 @@ function PrayerCard({ prayer, day, expanded, active, upcoming, time, sunnahPrefe
           }}
           aria-expanded={expanded}
           aria-controls={`details-${prayer.id}`}
-          aria-label={`${expanded ? "Hide" : "Show"} ${prayer.name} Sunnah and adhkar`}
-        >{expanded ? "−" : "+"}</button>
+          aria-label={`${expanded ? "Hide" : "Show"} ${prayer.name} Sunnah prayers`}
+        >
+          <span className={`expand-prayer-chevron ${expanded ? "open" : ""}`} aria-hidden="true" />
+        </button>
       </div>
       {expanded && (
         <div className="prayer-details" id={`details-${prayer.id}`}>
@@ -635,34 +660,18 @@ function PrayerCard({ prayer, day, expanded, active, upcoming, time, sunnahPrefe
           ) : (
             <p className="empty-sunnah">No Sunnah entries to track for {prayer.name} in the minimum set.</p>
           )}
-          <div className="prayer-adhkar">
-            <div className="subsection-title">
-              <span>My {prayer.name} adhkar</span>
-              <span>{prayerAdhkar.length}</span>
-            </div>
-            {prayerAdhkar.map((item) => {
-              const done = Boolean(day.customAdhkarDone[item.id]);
-              return (
-                <div className={`custom-dhikr ${done ? "done" : ""}`} key={item.id}>
-                  <span>{item.text} <small>{item.count}</small></span>
-                  <button
-                    className="dhikr-check"
-                    type="button"
-                    aria-label={`${done ? "Unmark" : "Mark"} adhkar complete`}
-                    aria-pressed={done}
-                    onClick={() => onToggle("customAdhkarDone", item.id)}
-                  >{done ? "✓" : ""}</button>
-                </div>
-              );
-            })}
-            <form className="add-dhikr-form" onSubmit={handleAdd}>
-              <label className="visually-hidden" htmlFor={`dhikr-text-${prayer.id}`}>Adhkar text</label>
-              <textarea id={`dhikr-text-${prayer.id}`} name="text" placeholder="Add adhkar for this prayer" required maxLength={5000} rows={2} dir="auto" />
-              <label className="visually-hidden" htmlFor={`dhikr-count-${prayer.id}`}>Count or note</label>
-              <input id={`dhikr-count-${prayer.id}`} name="count" placeholder="Count or note (optional)" maxLength={24} />
-              <button className="primary-button add-dhikr-btn" type="submit">Add</button>
-            </form>
-          </div>
+          {habit && (
+            <button
+              className={`prayer-linked-habit ${day.habits[habit.id] ? "done" : ""}`}
+              type="button"
+              aria-pressed={Boolean(day.habits[habit.id])}
+              onClick={() => onToggle("habits", habit.id)}
+            >
+              <span className="habit-check" aria-hidden="true">{day.habits[habit.id] ? "✓" : ""}</span>
+              <span className="habit-copy"><strong>{habit.label}</strong><small>{habit.hint}</small></span>
+              <span className="habit-state">{day.habits[habit.id] ? "Done" : "Mark done"}</span>
+            </button>
+          )}
         </div>
       )}
     </article>
@@ -700,15 +709,23 @@ function App() {
   const activeKey = dateKey(selectedDate);
   const day = normalizeDay(days[activeKey]);
   const activeGuide = adhkarGuide.find((routine) => routine.id === selectedGuideId) || adhkarGuide[0];
+  const guideRoutines = [activeGuide];
+  if (selectedGuideId === "fajr" || selectedGuideId === "maghrib") {
+    const afterPrayerGuide = adhkarGuide.find((routine) => routine.id === "after-prayer");
+    if (afterPrayerGuide) guideRoutines.push(afterPrayerGuide);
+  }
   const guideItemDone = (item) => item.target === null
     ? Boolean(day.guideDone[item.id])
     : (day.guideCounts[item.id] || 0) >= item.target;
-  const guideCompleted = activeGuide.items.filter(guideItemDone).length;
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(timer);
   }, []);
+
+  useLayoutEffect(() => {
+    if (activeTab === "guide") window.scrollTo(0, 0);
+  }, [activeTab]);
 
   useEffect(() => {
     const currentKey = dateKey(now);
@@ -769,6 +786,19 @@ function App() {
     return { times: todayTimes, upcoming, current };
   }, [coordinates, Math.floor(now.getTime() / 60000)]);
 
+  function openGuide() {
+    const minuteOfDay = now.getHours() * 60 + now.getMinutes();
+    let routineId = "after-prayer";
+
+    if (minuteOfDay >= 22 * 60) routineId = "before-sleep";
+    else if (now.getDay() === 5 && minuteOfDay >= 10 * 60 && minuteOfDay < 15 * 60) routineId = "friday";
+    else if (schedule?.current?.id === "fajr") routineId = "fajr";
+    else if (schedule?.current?.id === "maghrib") routineId = "maghrib";
+
+    setSelectedGuideId(routineId);
+    setActiveTab("guide");
+  }
+
   const updateDay = (updater) => {
     setDays((previous) => ({
       ...previous,
@@ -809,14 +839,6 @@ function App() {
     fardh: Object.fromEntries(fardhIds.map((id) => [id, "on-time"]))
   }));
 
-  const addPrayerAdhkar = (prayerId, text, count) => {
-    const id = `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    updateDay((previous) => ({
-      ...previous,
-      customAdhkar: [...previous.customAdhkar, { id, prayerId, text, count }]
-    }));
-  };
-
   function notify(message) {
     setNotice(message);
   }
@@ -854,13 +876,14 @@ function App() {
   }, []);
 
   const progress = fardhIds.filter((id) => isFulfilled(day.fardh[id])).length;
-  const dhikrDone = dailyDhikr.filter((item) => day.adhkar[item.id]).length
-    + day.customAdhkar.filter((item) => day.customAdhkarDone[item.id]).length;
-  const totalDhikr = dailyDhikr.length + day.customAdhkar.length;
   const dateLabel = fullDate(selectedDate);
   const hijriLabel = formatHijriDate(selectedDate);
   const hijriArabicLabel = formatHijriDate(selectedDate, "ar-SA");
   const viewingToday = dateKey(selectedDate) === dateKey(now);
+  useEffect(() => {
+    if (viewingToday && schedule?.current) setExpandedPrayer(schedule.current.id);
+  }, [schedule?.current?.id, viewingToday]);
+
   const currentMonthKey = `${viewMonth.getFullYear()}-${String(viewMonth.getMonth() + 1).padStart(2, "0")}`;
   const todayMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   const daysInMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0).getDate();
@@ -1036,46 +1059,51 @@ function App() {
                 );
               })}
             </div>
-            <section className="guide-routine-card" aria-label={`${activeGuide.label} adhkar`}>
-              <div className="guide-routine-heading">
-                <div>
-                  <p className="eyebrow">{activeGuide.label}</p>
-                  <h2>{activeGuide.hint}</h2>
-                </div>
-                <button className="guide-reset-button" type="button" onClick={() => resetGuide(activeGuide)}>
-                  Reset set
-                </button>
-              </div>
-              <div
-                className="guide-progress-track"
-                role="progressbar"
-                aria-label={`${activeGuide.label} adhkar completed`}
-                aria-valuenow={guideCompleted}
-                aria-valuemin={0}
-                aria-valuemax={activeGuide.items.length}
-              >
-                <span style={{ width: `${(guideCompleted / activeGuide.items.length) * 100}%` }} />
-              </div>
-              <div className="guide-items">
-                {activeGuide.items.map((item) => (
-                  <GuideDhikrCard
-                    key={item.id}
-                    item={item}
-                    count={day.guideCounts[item.id] || 0}
-                    done={guideItemDone(item)}
-                    onIncrement={() => changeGuideCount(item.id, 1)}
-                    onDecrement={() => changeGuideCount(item.id, -1)}
-                    onMark={() => toggle("guideDone", item.id)}
-                  />
-                ))}
-              </div>
-              <a className="guide-source-link" href={adhkarPdfUrl} target="_blank" rel="noreferrer">
-                Open the complete 9-page source guide <span aria-hidden="true">↗</span>
-              </a>
-              <p className="guide-source-note">
-                The PDF includes full Quranic passages, longer wording, meanings, references, and notes about customary additions and narrations to verify with a trusted teacher.
-              </p>
-            </section>
+            {guideRoutines.map((routine) => {
+              const completed = routine.items.filter(guideItemDone).length;
+              return (
+                <section className="guide-routine-card" aria-label={`${routine.label} adhkar`} key={routine.id}>
+                  <div className="guide-routine-heading">
+                    <div>
+                      <p className="eyebrow">{routine.label}</p>
+                      <h2>{routine.hint}</h2>
+                    </div>
+                    <button className="guide-reset-button" type="button" onClick={() => resetGuide(routine)}>
+                      Reset set
+                    </button>
+                  </div>
+                  <div
+                    className="guide-progress-track"
+                    role="progressbar"
+                    aria-label={`${routine.label} adhkar completed`}
+                    aria-valuenow={completed}
+                    aria-valuemin={0}
+                    aria-valuemax={routine.items.length}
+                  >
+                    <span style={{ width: `${(completed / routine.items.length) * 100}%` }} />
+                  </div>
+                  <div className="guide-items">
+                    {routine.items.map((item) => (
+                      <GuideDhikrCard
+                        key={item.id}
+                        item={item}
+                        count={day.guideCounts[item.id] || 0}
+                        done={guideItemDone(item)}
+                        onIncrement={() => changeGuideCount(item.id, 1)}
+                        onDecrement={() => changeGuideCount(item.id, -1)}
+                        onMark={() => toggle("guideDone", item.id)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+            <a className="guide-source-link" href={adhkarPdfUrl} target="_blank" rel="noreferrer">
+              Open the complete 9-page source guide <span aria-hidden="true">↗</span>
+            </a>
+            <p className="guide-source-note">
+              The PDF includes full Quranic passages, longer wording, meanings, references, and notes about customary additions and narrations to verify with a trusted teacher.
+            </p>
           </section>
         )}
 
@@ -1117,7 +1145,7 @@ function App() {
             </section>
 
             <div className="section-title-row">
-              <div><h2>Fardh prayers</h2><p>Tap a tile to cycle statuses. Use the dropdown to choose one. + opens Sunnah.</p></div>
+              <div><h2>Fardh prayers</h2><p>Tap a tile to cycle statuses. Use the dropdown to choose one. The arrow opens Sunnah and related habits.</p></div>
             </div>
             <section className="prayer-list" aria-label="Fardh prayers">
               {displayedPrayers.map((prayer) => (
@@ -1125,6 +1153,7 @@ function App() {
                   key={prayer.id}
                   prayer={prayer}
                   day={day}
+                  habit={nightPrayerHabits.find((item) => item.prayerId === prayer.id)}
                   active={viewingToday && schedule?.current?.id === prayer.id}
                   upcoming={viewingToday && schedule?.upcoming?.id === prayer.id}
                   sunnahPreference={sunnahPreference}
@@ -1135,7 +1164,6 @@ function App() {
                   onExpand={() => setExpandedPrayer((current) => current === prayer.id ? null : prayer.id)}
                   onStatusChange={setPrayerStatus}
                   onToggle={toggle}
-                  onAddAdhkar={addPrayerAdhkar}
                 />
               ))}
             </section>
@@ -1161,54 +1189,6 @@ function App() {
               </div>
             </section>
 
-            <section className="daily-habits-section" aria-labelledby="night-prayers-heading">
-              <div className="section-title-row">
-                <div><h2 id="night-prayers-heading">Night prayers</h2><p>Tahajjud and Witr are tracked separately.</p></div>
-              </div>
-              <div className="habit-toggle-list">
-                {nightPrayerHabits.map((habit) => (
-                  <button
-                    key={habit.id}
-                    type="button"
-                    className={`habit-toggle ${day.habits[habit.id] ? "done" : ""}`}
-                    aria-pressed={Boolean(day.habits[habit.id])}
-                    onClick={() => toggle("habits", habit.id)}
-                  >
-                    <span className="habit-check" aria-hidden="true">{day.habits[habit.id] ? "✓" : ""}</span>
-                    <span className="habit-copy"><strong>{habit.label}</strong><small>{habit.hint}</small></span>
-                    <span className="habit-state">{day.habits[habit.id] ? "Done" : "Mark done"}</span>
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            <section className="adhkar-section">
-              <div className="section-title-row">
-                <div><p className="eyebrow">Daily remembrance</p><h2>Adhkar</h2></div>
-                <div className="adhkar-heading-actions">
-                  <button className="guide-inline-link" type="button" onClick={() => setActiveTab("guide")}>Open guide</button>
-                  <span className="completion-badge">{dhikrDone} / {totalDhikr}</span>
-                </div>
-              </div>
-              <div className="adhkar-list">
-                {dailyDhikr.map((item, index) => {
-                  const done = Boolean(day.adhkar[item.id]);
-                  return (
-                    <div className={`dhikr-row ${done ? "done" : ""}`} key={item.id}>
-                      <span className="dhikr-number">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="dhikr-copy"><strong>{item.text}</strong><small>{item.count}</small></span>
-                      <button
-                        className="dhikr-check"
-                        type="button"
-                        aria-label={`${done ? "Unmark" : "Mark"} ${item.text} complete`}
-                        aria-pressed={done}
-                        onClick={() => toggle("adhkar", item.id)}
-                      >{done ? "✓" : ""}</button>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
           </section>
         )}
 
@@ -1404,7 +1384,7 @@ function App() {
             key={tab.id}
             className={activeTab === tab.id ? "active" : ""}
             aria-current={activeTab === tab.id ? "page" : undefined}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => tab.id === "guide" ? openGuide() : setActiveTab(tab.id)}
           >
             <span className="nav-icon" aria-hidden="true">{tab.icon}</span>
             <span>{tab.label}</span>

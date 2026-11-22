@@ -201,7 +201,7 @@ h1, h2, h3, p { margin-top: 0; }
 .section-title-row h2 { margin: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 23px; font-weight: 500; letter-spacing: -.03em; }
 .section-title-row p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 .prayer-list { display: grid; gap: 9px; }
-.prayer-card, .adhkar-section, .insight-card, .settings-card, .calendar-panel, .month-summary {
+.prayer-card, .insight-card, .settings-card, .calendar-panel, .month-summary {
   border: 1px solid var(--line);
   border-radius: 15px;
   background: var(--paper);
@@ -243,6 +243,15 @@ h1, h2, h3, p { margin-top: 0; }
 }
 :root[data-theme="dark"] .expand-prayer-button { color: #b7e5d2; }
 .expand-prayer-button:hover { border-color: var(--green-700); background: var(--green-50); }
+.expand-prayer-chevron {
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform .18s ease;
+}
+.expand-prayer-chevron.open { transform: translateY(2px) rotate(225deg); }
 .prayer-symbol {
   width: 39px;
   height: 39px;
@@ -264,6 +273,8 @@ h1, h2, h3, p { margin-top: 0; }
 .prayer-meta .prayer-time { color: var(--green-800); font-weight: 700; }
 :root[data-theme="dark"] .prayer-meta .prayer-time { color: #b7e5d2; }
 .prayer-meta .prayer-period { color: var(--green-700); font-size: 10px; font-weight: 700; }
+.prayer-meta .prayer-sunnah-summary { padding: 1px 6px; border-radius: 99px; color: var(--green-900); background: var(--green-50); font-size: 9px; font-weight: 700; white-space: nowrap; }
+:root[data-theme="dark"] .prayer-meta .prayer-sunnah-summary { color: #b7e5d2; }
 .disclosure-mark { margin-left: auto; color: var(--green-700); font-size: 23px; font-weight: 400; line-height: 1; }
 .status-select-label { flex: 0 0 auto; }
 .status-select {
@@ -333,25 +344,32 @@ h1, h2, h3, p { margin-top: 0; }
 .sunnah-item.done .small-check, .habit-toggle.done .habit-check { border-color: var(--green-700); background: var(--green-700); }
 :root[data-theme="dark"] .small-check, :root[data-theme="dark"] .habit-check { border-color: #46564d; }
 :root[data-theme="dark"] .sunnah-item.done .small-check,
-:root[data-theme="dark"] .habit-toggle.done .habit-check,
-:root[data-theme="dark"] .dhikr-check[aria-pressed="true"] { border-color: var(--green-800); background: var(--green-800); }
+:root[data-theme="dark"] .habit-toggle.done .habit-check { border-color: var(--green-800); background: var(--green-800); }
 .sunnah-state { margin-left: auto; color: var(--muted); font-size: 10px; }
-.prayer-adhkar { margin-top: 15px; padding-top: 8px; border-top: 1px solid var(--line); }
-.custom-dhikr { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 12px; line-height: 1.5; }
-.custom-dhikr > span { min-width: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
-.custom-dhikr small { color: var(--muted); }
-.custom-dhikr.done > span { color: var(--muted); text-decoration: line-through; }
-.dhikr-check { width: 32px; height: 32px; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 9px; color: transparent; background: var(--paper); cursor: pointer; }
-.dhikr-check[aria-pressed="true"] { border-color: var(--green-700); color: white; background: var(--green-700); }
-:root[data-theme="dark"] .dhikr-check[aria-pressed="true"] { border-color: var(--green-800); background: var(--green-800); }
-.add-dhikr-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; margin-top: 9px; }
-.add-dhikr-form textarea, .add-dhikr-form input { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--paper); font-size: 12px; }
-.add-dhikr-form textarea { grid-column: 1 / -1; resize: vertical; }
-.add-dhikr-form input { grid-column: 1; }
 .primary-button { border: 0; border-radius: 9px; color: white; background: var(--green-800); font-weight: 700; cursor: pointer; }
-.add-dhikr-btn { grid-column: 2; grid-row: 2; padding: 8px 13px; font-size: 12px; }
 
-.daily-habits-section, .adhkar-section { margin-top: 31px; }
+.daily-habits-section { margin-top: 31px; }
+.prayer-linked-habit {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 0;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  background: var(--soft);
+  text-align: left;
+  cursor: pointer;
+}
+.prayer-linked-habit.done { border-color: #bad8ca; background: var(--green-50); }
+.prayer-linked-habit.done .habit-check { border-color: var(--green-700); background: var(--green-700); }
+.prayer-linked-habit.done .habit-state { color: var(--green-800); font-weight: 700; }
+:root[data-theme="dark"] .prayer-linked-habit.done { border-color: #39614e; }
+:root[data-theme="dark"] .prayer-linked-habit.done .habit-check { border-color: var(--green-800); background: var(--green-800); }
+:root[data-theme="dark"] .prayer-linked-habit.done .habit-state { color: #b7e5d2; }
 .habit-toggle-list { display: grid; gap: 8px; }
 .habit-toggle {
   width: 100%;
@@ -376,18 +394,6 @@ h1, h2, h3, p { margin-top: 0; }
 .habit-state { margin-left: auto; color: var(--muted); font-size: 10px; }
 .habit-toggle.done .habit-state { color: var(--green-800); font-weight: 700; }
 :root[data-theme="dark"] .habit-toggle.done .habit-state { color: #b7e5d2; }
-
-.adhkar-section { padding: 18px; }
-.completion-badge { padding: 6px 10px; border-radius: 99px; color: var(--green-900); background: var(--green-100); font-size: 11px; font-weight: 700; white-space: nowrap; }
-:root[data-theme="dark"] .completion-badge { color: #b7e5d2; }
-.adhkar-list { display: grid; gap: 6px; }
-.dhikr-row { display: grid; grid-template-columns: 28px minmax(0, 1fr) 36px; align-items: center; gap: 10px; padding: 8px; border-radius: 10px; }
-.dhikr-row.done { background: var(--green-50); }
-.dhikr-number { color: var(--gold); font-size: 11px; font-weight: 700; }
-.dhikr-copy { min-width: 0; }
-.dhikr-copy strong, .dhikr-copy small { display: block; }
-.dhikr-copy strong { font-size: 12px; font-weight: 600; line-height: 1.5; }
-.dhikr-copy small { color: var(--muted); font-size: 10px; }
 
 .guide-screen { gap: 17px; }
 .guide-routine-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 5px; scrollbar-width: thin; }
@@ -424,10 +430,14 @@ h1, h2, h3, p { margin-top: 0; }
 :root[data-theme="dark"] .guide-item.done { border-color: #39614e; }
 .guide-item-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .guide-item-heading h3 { margin: 0; color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.45; }
-.guide-arabic { margin: 10px 0 7px; color: var(--green-900); font-family: "Times New Roman", serif; font-size: 23px; line-height: 1.9; text-align: right; }
+.guide-arabic { margin: 10px 0 7px; color: var(--green-900); font-family: "Times New Roman", serif; font-size: 23px; line-height: 1.9; text-align: right; white-space: pre-line; }
 :root[data-theme="dark"] .guide-arabic { color: #c4ead8; }
-.guide-transliteration { margin: 8px 0 4px; color: var(--ink); font-size: 12px; line-height: 1.65; }
-.guide-meaning, .guide-note { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.guide-text-toggles { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.guide-text-toggle { padding: 6px 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--green-900); background: var(--soft); font-size: 10px; font-weight: 700; cursor: pointer; }
+:root[data-theme="dark"] .guide-text-toggle { color: #b7e5d2; }
+.guide-text-toggle:hover { border-color: var(--green-700); }
+.guide-transliteration { margin: 8px 0 4px; color: var(--ink); font-size: 12px; line-height: 1.65; white-space: pre-line; }
+.guide-meaning, .guide-note { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; white-space: pre-line; }
 .guide-note { margin-top: 7px; padding-left: 9px; border-left: 2px solid var(--gold); }
 .guide-done-badge { flex: 0 0 auto; padding: 4px 8px; border-radius: 99px; color: var(--green-900); background: var(--green-100); font-size: 9px; font-weight: 700; }
 :root[data-theme="dark"] .guide-done-badge { color: #b7e5d2; }
@@ -445,10 +455,6 @@ h1, h2, h3, p { margin-top: 0; }
 .guide-source-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 15px; padding: 12px; border: 1px solid var(--line); border-radius: 11px; color: var(--green-900); background: var(--green-50); font-size: 12px; font-weight: 700; text-decoration: none; }
 :root[data-theme="dark"] .guide-source-link { color: #b7e5d2; }
 .guide-source-note { margin: 9px 2px 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
-.adhkar-heading-actions { display: flex; align-items: center; gap: 8px; }
-.guide-inline-link { padding: 6px 9px; border: 1px solid var(--line); border-radius: 99px; color: var(--green-900); background: var(--paper); font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-:root[data-theme="dark"] .guide-inline-link { color: #b7e5d2; }
-
 .screen-section { display: grid; gap: 17px; }
 .screen-heading { margin-bottom: 3px; }
 .screen-heading > p:last-child { margin: 9px 0 0; color: var(--muted); font-size: 13px; }

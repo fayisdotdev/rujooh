@@ -4,13 +4,12 @@ Rujooh is a personal salah tracker built with React and Vite. Prayer history, Su
 
 ## Features
 
-- Record each Fardh prayer as pending, on time, Jama', Qasr, Qadha, or missed.
-- Tap a Fardh tile to cycle through Pending, Done, Jama', Qasr, Qadha, and Missed, or choose a status directly from its dropdown; mark all five from the daily progress panel.
+- Record each Fardh prayer as pending, on time, Qadha, Jama', Qasr, or missed.
+- Tap a Fardh tile to cycle through Pending, Done, Qadha, Jama', Qasr, and Missed, or choose a status directly from its dropdown; mark all five from the daily progress panel.
 - Choose minimum or maximum before/after Sunnah rak'ah counts in Settings.
-- Use the plus control to expand a Fardh tile and mark its related Sunnah prayers done or not done.
-- Track Quran recitation, Tahajjud, and Witr; Witr is grouped with Tahajjud under Night prayers.
-- Track adhkar and custom prayer adhkar.
-- Use the daily adhkar guide for after-prayer, Fajr/morning, Maghrib, Friday, and bedtime routines. Tap counters to track repetitions; progress is saved with each day's record. Open the source PDF from the guide for complete Quranic passages and references.
+- Use the arrow control to expand a Fardh tile and mark its related Sunnah prayers done or not done.
+- Expand the Fajr card to track Tahajjud and the Isha card to track Witr; track Quran recitation under Daily habits.
+- Use the daily adhkar guide for after-prayer, Fajr/morning, Maghrib, Friday, and bedtime routines. Fajr and Maghrib continue with the after-prayer adhkar below. Tap counters to track repetitions; progress is saved with each day's record. Open the source PDF from the guide for complete Quranic passages and references.
 - Browse daily records by month, review completion insights and streaks, and switch between light and dark themes.
 - Export a JSON backup or monthly CSV, and restore a JSON backup.
 
