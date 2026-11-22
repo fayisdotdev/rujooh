@@ -26,6 +26,231 @@ const dailyDhikr = [
   { id: "ayatul-kursi", text: "Ayatul Kursi", count: "1x" }
 ];
 
+const adhkarGuide = [
+  {
+    id: "after-prayer",
+    label: "After prayer",
+    hint: "After each of the five fard prayers",
+    items: [
+      {
+        id: "guide-istighfar",
+        title: "Seek forgiveness",
+        arabic: "أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ",
+        transliteration: "Astaghfirullah al-'Azim",
+        meaning: "I seek forgiveness from Allah, the Magnificent.",
+        target: 3
+      },
+      {
+        id: "guide-salam",
+        title: "Allahumma antas-salam",
+        arabic: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ",
+        transliteration: "Allahumma antas-salam wa minkas-salam, tabarakta ya dhal-jalali wal-ikram",
+        meaning: "O Allah, You are Peace and from You comes peace. Blessed are You, O Possessor of Majesty and Honour.",
+        target: 1
+      },
+      {
+        id: "guide-dhikr-help",
+        title: "Ask for help in worship",
+        arabic: "اللَّهُمَّ أَعِنِّي عَلَىٰ ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+        transliteration: "Allahumma a'inni 'ala dhikrika wa shukrika wa husni 'ibadatik",
+        meaning: "O Allah, help me to remember You, to thank You, and to worship You in the best way.",
+        target: 1
+      },
+      {
+        id: "guide-tasbih",
+        title: "Tasbih",
+        arabic: "سُبْحَانَ اللَّهِ",
+        transliteration: "SubhanAllah — Glory be to Allah.",
+        meaning: "The guide gives 33 repetitions.",
+        target: 33
+      },
+      {
+        id: "guide-tahmid",
+        title: "Praise Allah",
+        arabic: "الْحَمْدُ لِلَّهِ",
+        transliteration: "Alhamdulillah — All praise is for Allah.",
+        meaning: "The guide gives 33 repetitions.",
+        target: 33
+      },
+      {
+        id: "guide-takbir",
+        title: "Magnify Allah",
+        arabic: "اللَّهُ أَكْبَرُ",
+        transliteration: "Allahu Akbar — Allah is the Greatest.",
+        meaning: "The guide gives 33 repetitions (some narrations say 34).",
+        target: 33
+      },
+      {
+        id: "guide-complete-hundred",
+        title: "Complete the hundred",
+        arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",
+        transliteration: "La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadir",
+        meaning: "There is no god but Allah alone, with no partner. His is the dominion and praise, and He has power over all things.",
+        target: 1
+      },
+      {
+        id: "guide-ayatul-kursi",
+        title: "Ayat al-Kursi · Quran 2:255",
+        transliteration: "Recite Ayat al-Kursi once. Open the source guide for the complete Arabic and meaning.",
+        meaning: "The Throne Verse. The PDF includes its full Arabic, transliteration, meaning, and a source note.",
+        target: 1
+      }
+    ]
+  },
+  {
+    id: "fajr",
+    label: "Fajr & morning",
+    hint: "After Fajr, then morning remembrance",
+    items: [
+      {
+        id: "guide-fajr-maghrib-tahlil",
+        title: "La ilaha illallah wahdahu",
+        arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، يُحْيِي وَيُمِيتُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",
+        transliteration: "La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamd, yuhyi wa yumit, wa huwa 'ala kulli shay'in qadir",
+        meaning: "There is no god but Allah alone, with no partner. His is the dominion and praise; He gives life and causes death, and has power over all things.",
+        target: 10,
+        note: "The guide places this after Fajr and Maghrib fard, before moving or speaking."
+      },
+      {
+        id: "guide-protection-from-fire",
+        title: "Ask for protection from the Fire",
+        arabic: "اللَّهُمَّ أَجِرْنِي مِنَ النَّارِ",
+        transliteration: "Allahumma ajirni minan-nar",
+        meaning: "O Allah, protect me from the Fire.",
+        target: 7,
+        note: "The guide notes that scholars differ about the grading of this narration."
+      },
+      {
+        id: "guide-fajr-dua",
+        title: "Ask for beneficial knowledge and provision",
+        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا",
+        transliteration: "Allahumma inni as'aluka 'ilman nafi'a, wa rizqan tayyiba, wa 'amalan mutaqabbala",
+        meaning: "O Allah, I ask You for beneficial knowledge, good and lawful provision, and deeds that are accepted.",
+        target: 1
+      },
+      {
+        id: "guide-morning-praise",
+        title: "Morning praise",
+        arabic: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+        transliteration: "Subhanallahi wa bihamdihi, 'adada khalqihi, wa rida nafsihi, wa zinata 'arshihi, wa midada kalimatihi",
+        meaning: "Glory be to Allah and praise be to Him, as many times as the number of His creation, as much as pleases Him, as heavy as His Throne, and as much as the ink of His words.",
+        target: 3
+      },
+      {
+        id: "guide-raditu",
+        title: "Affirm contentment",
+        arabic: "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا",
+        transliteration: "Raditu billahi rabba, wa bil-Islami dina, wa bi-Muhammadin sallallahu 'alayhi wa sallama nabiyya",
+        meaning: "I am pleased with Allah as my Lord, Islam as my religion, and Muhammad ﷺ as my Prophet.",
+        target: 3
+      },
+      {
+        id: "guide-dua-good-ending",
+        title: "Ask for a good ending",
+        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ حُسْنَ الْخَاتِمَةِ",
+        transliteration: "Allahumma inni as'aluka husnal-khatimah",
+        meaning: "O Allah, I ask You for a good ending to my life.",
+        target: 1,
+        note: "One of the personal duas suggested in the guide."
+      },
+      {
+        id: "guide-dua-wellbeing",
+        title: "Ask for wellbeing",
+        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ",
+        transliteration: "Allahumma inni as'alukal-'afiyah",
+        meaning: "O Allah, I ask You for wellbeing, health, and safety.",
+        target: 1
+      },
+      {
+        id: "guide-dua-paradise",
+        title: "Ask for Paradise",
+        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ",
+        transliteration: "Allahumma inni as'alukal-jannah",
+        meaning: "O Allah, I ask You for Paradise.",
+        target: 1
+      },
+      {
+        id: "guide-dua-firm-heart",
+        title: "Ask for steadfastness",
+        arabic: "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَىٰ دِينِكَ",
+        transliteration: "Ya muqallibal-qulub, thabbit qalbi 'ala dinik",
+        meaning: "O Turner of hearts, keep my heart firm on Your religion.",
+        target: 1
+      },
+      {
+        id: "guide-dua-parents",
+        title: "Pray for your parents",
+        arabic: "رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ",
+        transliteration: "Rabbighfir li wa li-walidayya",
+        meaning: "My Lord, forgive me and my parents. (Quran 71:28)",
+        target: 1
+      }
+    ]
+  },
+  {
+    id: "maghrib",
+    label: "Maghrib",
+    hint: "After Maghrib fard, before moving or speaking",
+    items: [
+      {
+        id: "guide-maghrib-tahlil",
+        title: "La ilaha illallah wahdahu",
+        arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، يُحْيِي وَيُمِيتُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",
+        transliteration: "La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamd, yuhyi wa yumit, wa huwa 'ala kulli shay'in qadir",
+        meaning: "There is no god but Allah alone, with no partner. His is the dominion and praise; He gives life and causes death, and has power over all things.",
+        target: 10,
+        note: "Read this before moving or speaking, then continue with the after-prayer adhkar."
+      },
+      {
+        id: "guide-maghrib-protection",
+        title: "Ask for protection from the Fire",
+        arabic: "اللَّهُمَّ أَجِرْنِي مِنَ النَّارِ",
+        transliteration: "Allahumma ajirni minan-nar",
+        meaning: "O Allah, protect me from the Fire.",
+        target: 7,
+        note: "The guide notes that scholars differ about the grading of this narration."
+      }
+    ]
+  },
+  {
+    id: "friday",
+    label: "Friday",
+    hint: "Salawat and Surah Al-Kahf",
+    items: [
+      {
+        id: "guide-friday-salawat",
+        title: "Send blessings upon the Prophet ﷺ",
+        transliteration: "Allahumma salli wa sallim 'ala rasulika sayyidina Muhammadin sayyidil-awwalin. Allahumma salli wa sallim 'ala rasulika sayyidina Muhammadin sayyidil-akhirin. Allahumma salli wa sallim 'ala rasulika sayyidina Muhammadin sayyidil-mala'il-a'la ila yawmid-din.",
+        meaning: "O Allah, send blessings and peace upon Your Messenger, our master Muhammad, the master of the first and last generations, and the highest assembly until the Day of Judgement.",
+        target: null,
+        note: "The guide recommends increasing salawat throughout Friday; this is a customary wording."
+      },
+      {
+        id: "guide-friday-kahf",
+        title: "Read Surah Al-Kahf",
+        transliteration: "The guide recommends reading Surah Al-Kahf on Friday.",
+        meaning: "Open the source guide for its notes and references.",
+        target: null
+      }
+    ]
+  },
+  {
+    id: "before-sleep",
+    label: "Before sleep",
+    hint: "The last two verses of Al-Baqarah",
+    items: [
+      {
+        id: "guide-last-verses",
+        title: "Last two verses of Al-Baqarah · Quran 2:285–286",
+        transliteration: "Recite the last two verses of Surah Al-Baqarah. Open the source guide for the complete Arabic and meaning.",
+        meaning: "The guide places these verses before sleep and includes the full Arabic, meaning, and a source note.",
+        target: 1
+      }
+    ]
+  }
+];
+
+const adhkarPdfUrl = `${import.meta.env.BASE_URL}adhkar-guide.pdf`;
 const fardhIds = prayers.map((prayer) => prayer.id);
 const statusOptions = [
   { id: "pending", label: "Pending" },
@@ -50,6 +275,7 @@ const legacySunnahIds = {
 };
 const tabs = [
   { id: "today", label: "Today", icon: "◷" },
+  { id: "guide", label: "Adhkar", icon: "✦" },
   { id: "month", label: "Month", icon: "▦" },
   { id: "insights", label: "Insights", icon: "⌁" },
   { id: "settings", label: "Settings", icon: "⚙" }
@@ -67,7 +293,7 @@ function isValidDateKey(value) {
 }
 
 function emptyDay() {
-  return { fardh: {}, sunnah: {}, adhkar: {}, customAdhkar: [], customAdhkarDone: {}, habits: {} };
+  return { fardh: {}, sunnah: {}, adhkar: {}, customAdhkar: [], customAdhkarDone: {}, habits: {}, guideCounts: {}, guideDone: {} };
 }
 
 function isRecord(value) {
@@ -77,6 +303,11 @@ function isRecord(value) {
 function normalizeBooleanMap(value) {
   if (!isRecord(value)) return {};
   return Object.fromEntries(Object.entries(value).filter(([, done]) => typeof done === "boolean"));
+}
+
+function normalizeCountMap(value) {
+  if (!isRecord(value)) return {};
+  return Object.fromEntries(Object.entries(value).filter(([, count]) => Number.isSafeInteger(count) && count >= 0));
 }
 
 function normalizeDay(value) {
@@ -115,7 +346,9 @@ function normalizeDay(value) {
     adhkar: normalizeBooleanMap(value.adhkar),
     customAdhkar,
     customAdhkarDone: normalizeBooleanMap(value.customAdhkarDone),
-    habits
+    habits,
+    guideCounts: normalizeCountMap(value.guideCounts),
+    guideDone: normalizeBooleanMap(value.guideDone)
   };
 }
 
@@ -261,6 +494,34 @@ function isFulfilled(status) {
 
 function sunnahCount(prayer, position, preference) {
   return prayer.sunnah.find((item) => item.position === position)?.[preference] || 0;
+}
+
+function GuideDhikrCard({ item, count, done, onIncrement, onDecrement, onMark }) {
+  return (
+    <article className={`guide-item ${done ? "done" : ""}`}>
+      <div className="guide-item-heading">
+        <div>
+          <h3>{item.title}</h3>
+          {item.arabic && <p className="guide-arabic" lang="ar" dir="rtl">{item.arabic}</p>}
+        </div>
+        {done && <span className="guide-done-badge">Done</span>}
+      </div>
+      <p className="guide-transliteration" dir="auto">{item.transliteration}</p>
+      <p className="guide-meaning">{item.meaning}</p>
+      {item.note && <p className="guide-note">{item.note}</p>}
+      {item.target === null ? (
+        <button className="guide-mark-button" type="button" aria-pressed={done} onClick={onMark}>
+          {done ? "Marked for today" : "Mark read"}
+        </button>
+      ) : (
+        <div className="guide-counter">
+          <button type="button" aria-label={`Decrease ${item.title} count`} onClick={onDecrement} disabled={count === 0}>−</button>
+          <span aria-live="polite"><strong>{count}</strong><small> / {item.target}</small></span>
+          <button type="button" aria-label={`Count ${item.title}`} onClick={onIncrement}>+</button>
+        </div>
+      )}
+    </article>
+  );
 }
 
 function getStreak(days, today) {
@@ -417,6 +678,7 @@ function App() {
     return new Date(date.getFullYear(), date.getMonth(), 1);
   });
   const [activeTab, setActiveTab] = useState("today");
+  const [selectedGuideId, setSelectedGuideId] = useState("after-prayer");
   const [expandedPrayer, setExpandedPrayer] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
   const [locationStatus, setLocationStatus] = useState("Allow location access to calculate approximate times on this device.");
@@ -437,6 +699,11 @@ function App() {
   const todayKeyRef = useRef(dateKey());
   const activeKey = dateKey(selectedDate);
   const day = normalizeDay(days[activeKey]);
+  const activeGuide = adhkarGuide.find((routine) => routine.id === selectedGuideId) || adhkarGuide[0];
+  const guideItemDone = (item) => item.target === null
+    ? Boolean(day.guideDone[item.id])
+    : (day.guideCounts[item.id] || 0) >= item.target;
+  const guideCompleted = activeGuide.items.filter(guideItemDone).length;
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
@@ -513,6 +780,24 @@ function App() {
     ...previous,
     [type]: { ...previous[type], [id]: !previous[type][id] }
   }));
+
+  const changeGuideCount = (id, amount) => updateDay((previous) => ({
+    ...previous,
+    guideCounts: {
+      ...previous.guideCounts,
+      [id]: Math.max(0, Math.min(Number.MAX_SAFE_INTEGER, (previous.guideCounts[id] || 0) + amount))
+    }
+  }));
+
+  const resetGuide = (routine) => updateDay((previous) => {
+    const guideCounts = { ...previous.guideCounts };
+    const guideDone = { ...previous.guideDone };
+    routine.items.forEach((item) => {
+      delete guideCounts[item.id];
+      delete guideDone[item.id];
+    });
+    return { ...previous, guideCounts, guideDone };
+  });
 
   const setPrayerStatus = (id, status) => updateDay((previous) => ({
     ...previous,
@@ -727,6 +1012,73 @@ function App() {
       </header>
 
       <main className="main-content">
+        {activeTab === "guide" && (
+          <section aria-labelledby="guide-title" className="screen-section guide-screen">
+            <div className="screen-heading">
+              <p className="eyebrow">From your daily adhkar guide</p>
+              <h1 id="guide-title">A dhikr at a time</h1>
+              <p>{dateLabel} · Your counts are saved on this device for the selected day.</p>
+            </div>
+            <div className="guide-routine-tabs" aria-label="Choose an adhkar routine">
+              {adhkarGuide.map((routine) => {
+                const completed = routine.items.filter(guideItemDone).length;
+                return (
+                  <button
+                    className={selectedGuideId === routine.id ? "selected" : ""}
+                    type="button"
+                    aria-pressed={selectedGuideId === routine.id}
+                    key={routine.id}
+                    onClick={() => setSelectedGuideId(routine.id)}
+                  >
+                    <strong>{routine.label}</strong>
+                    <small>{completed}/{routine.items.length} done</small>
+                  </button>
+                );
+              })}
+            </div>
+            <section className="guide-routine-card" aria-label={`${activeGuide.label} adhkar`}>
+              <div className="guide-routine-heading">
+                <div>
+                  <p className="eyebrow">{activeGuide.label}</p>
+                  <h2>{activeGuide.hint}</h2>
+                </div>
+                <button className="guide-reset-button" type="button" onClick={() => resetGuide(activeGuide)}>
+                  Reset set
+                </button>
+              </div>
+              <div
+                className="guide-progress-track"
+                role="progressbar"
+                aria-label={`${activeGuide.label} adhkar completed`}
+                aria-valuenow={guideCompleted}
+                aria-valuemin={0}
+                aria-valuemax={activeGuide.items.length}
+              >
+                <span style={{ width: `${(guideCompleted / activeGuide.items.length) * 100}%` }} />
+              </div>
+              <div className="guide-items">
+                {activeGuide.items.map((item) => (
+                  <GuideDhikrCard
+                    key={item.id}
+                    item={item}
+                    count={day.guideCounts[item.id] || 0}
+                    done={guideItemDone(item)}
+                    onIncrement={() => changeGuideCount(item.id, 1)}
+                    onDecrement={() => changeGuideCount(item.id, -1)}
+                    onMark={() => toggle("guideDone", item.id)}
+                  />
+                ))}
+              </div>
+              <a className="guide-source-link" href={adhkarPdfUrl} target="_blank" rel="noreferrer">
+                Open the complete 9-page source guide <span aria-hidden="true">↗</span>
+              </a>
+              <p className="guide-source-note">
+                The PDF includes full Quranic passages, longer wording, meanings, references, and notes about customary additions and narrations to verify with a trusted teacher.
+              </p>
+            </section>
+          </section>
+        )}
+
         {activeTab === "today" && (
           <section aria-labelledby="today-title">
             <div className="today-heading">
@@ -833,7 +1185,10 @@ function App() {
             <section className="adhkar-section">
               <div className="section-title-row">
                 <div><p className="eyebrow">Daily remembrance</p><h2>Adhkar</h2></div>
-                <span className="completion-badge">{dhikrDone} / {totalDhikr}</span>
+                <div className="adhkar-heading-actions">
+                  <button className="guide-inline-link" type="button" onClick={() => setActiveTab("guide")}>Open guide</button>
+                  <span className="completion-badge">{dhikrDone} / {totalDhikr}</span>
+                </div>
               </div>
               <div className="adhkar-list">
                 {dailyDhikr.map((item, index) => {

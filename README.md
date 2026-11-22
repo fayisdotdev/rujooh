@@ -10,6 +10,7 @@ Rujooh is a personal salah tracker built with React and Vite. Prayer history, Su
 - Use the plus control to expand a Fardh tile and mark its related Sunnah prayers done or not done.
 - Track Quran recitation, Tahajjud, and Witr; Witr is grouped with Tahajjud under Night prayers.
 - Track adhkar and custom prayer adhkar.
+- Use the daily adhkar guide for after-prayer, Fajr/morning, Maghrib, Friday, and bedtime routines. Tap counters to track repetitions; progress is saved with each day's record. Open the source PDF from the guide for complete Quranic passages and references.
 - Browse daily records by month, review completion insights and streaks, and switch between light and dark themes.
 - Export a JSON backup or monthly CSV, and restore a JSON backup.
 
