@@ -416,8 +416,6 @@ function App() {
             setExpandedPrayer={setExpandedPrayer}
             setPrayerStatus={setPrayerStatus}
             toggle={toggle}
-            dailyHabits={dailyHabits}
-            nightPrayerHabits={nightPrayerHabits}
           />
         )}
 
