@@ -231,8 +231,12 @@ function App() {
   const hijriArabicLabel = formatHijriDate(selectedDate, "ar-SA");
   const viewingToday = dateKey(selectedDate) === dateKey(now);
   useEffect(() => {
-    if (viewingToday && schedule?.current) setExpandedPrayer(schedule.current.id);
-  }, [schedule?.current?.id, viewingToday]);
+    setExpandedPrayer(
+      viewingToday
+        ? schedule?.current?.id ?? schedule?.upcoming?.id ?? prayers[0].id
+        : prayers[0].id
+    );
+  }, [activeKey, schedule?.current?.id, schedule?.upcoming?.id, viewingToday]);
 
   const currentMonthKey = `${viewMonth.getFullYear()}-${String(viewMonth.getMonth() + 1).padStart(2, "0")}`;
   const todayMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
