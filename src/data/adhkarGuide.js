@@ -219,8 +219,17 @@ export const adhkarGuide = [
   {
     id: "before-sleep",
     label: "Before sleep",
-    hint: "The last two verses of Al-Baqarah",
+    hint: "Before sleep and when waking at night",
     items: [
+      {
+        id: "guide-night-waking",
+        title: "When waking during the night",
+        arabic: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، الْحَمْدُ لِلَّهِ، وَسُبْحَانَ اللَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ، اللَّهُمَّ اغْفِرْ لِي",
+        transliteration: "Lā ilāha illallāhu waḥdahū lā sharīka lah, lahul-mulku wa lahul-ḥamd, wa Huwa ʿalā kulli shay’in Qadīr. Al-ḥamdu lillāh, wa subḥānallāh, wa lā ilāha illallāh, wallāhu akbar, wa lā ḥawla wa lā quwwata illā billāh. Allāhumma-ghfir lī.",
+        meaning: "There is no true god except Allah; He is One and has no partner with Him. His is the sovereignty and His is the praise, and He is Omnipotent. Praise be to Allah, exalted is Allah above [all imperfection], there is no true god except Allah, Allah is the Greatest, and there is no power and no strength except with Allah. O Allah, forgive me.",
+        target: 1,
+        note: "When waking at night: recite this dhikr, then make du'a, such as 'Allāhumma-ghfir lī.'"
+      },
       {
         id: "guide-last-verses",
         title: "Last two verses of Al-Baqarah · Quran 2:285–286",
@@ -236,6 +245,15 @@ export const adhkarGuide = [
     label: "Everyday",
     hint: "Adhkar for ordinary moments",
     items: [
+      {
+        id: "guide-night-waking",
+        title: "When waking during the night",
+        arabic: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، الْحَمْدُ لِلَّهِ، وَسُبْحَانَ اللَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ، اللَّهُمَّ اغْفِرْ لِي",
+        transliteration: "Lā ilāha illallāhu waḥdahū lā sharīka lah, lahul-mulku wa lahul-ḥamd, wa Huwa ʿalā kulli shay’in Qadīr. Al-ḥamdu lillāh, wa subḥānallāh, wa lā ilāha illallāh, wallāhu akbar, wa lā ḥawla wa lā quwwata illā billāh. Allāhumma-ghfir lī.",
+        meaning: "There is no true god except Allah; He is One and has no partner with Him. His is the sovereignty and His is the praise, and He is Omnipotent. Praise be to Allah, exalted is Allah above [all imperfection], there is no true god except Allah, Allah is the Greatest, and there is no power and no strength except with Allah. O Allah, forgive me.",
+        target: 1,
+        note: "Recite whenever you wake during the night, then make du'a such as 'Allāhumma-ghfir lī.'"
+      },
       {
         id: "guide-general-good-ending",
         title: "Ask for a good end",
