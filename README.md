@@ -23,3 +23,16 @@ npm run dev
 ```
 
 Open the local URL printed by Vite. Location access is optional and is used only to calculate approximate prayer times on the device.
+
+## Project structure
+
+- `src/screens/` contains the Today, Adhkar, Month, Insights, and Settings views.
+- `src/components/` contains reusable prayer and dhikr cards.
+- `src/data/adhkarGuide.js` holds the adhkar routines and their text.
+- `src/data/prayers.js` holds prayer and habit definitions.
+- `src/data/trackerConfig.js` holds status, navigation, and storage configuration.
+- `src/lib/` contains date, prayer-time, saved-data, and streak helpers.
+- `src/styles/app.css` contains the app's shared styles and theme.
+- `src/App.jsx` coordinates app state and connects screens to shared data.
+
+When adding content, keep existing prayer and dhikr item IDs stable: saved progress is keyed by those IDs in browser storage.
