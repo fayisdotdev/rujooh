@@ -7,6 +7,8 @@ export default function SettingsScreen({
   setSunnahPreference,
   theme,
   setTheme,
+  showMalayalamTranslations,
+  setShowMalayalamTranslations,
   exportJSON,
   exportCSV,
   importJSON
@@ -55,6 +57,15 @@ export default function SettingsScreen({
                   <button className="setting-row theme-setting" type="button" onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")} aria-pressed={theme === "dark"}>
                     <span><strong>Dark theme</strong><small>Choose a comfortable display.</small></span>
                     <span className={`toggle-switch ${theme === "dark" ? "on" : ""}`} aria-hidden="true"><i /></span>
+                  </button>
+                  <button
+                    className="setting-row theme-setting"
+                    type="button"
+                    onClick={() => setShowMalayalamTranslations((current) => !current)}
+                    aria-pressed={showMalayalamTranslations}
+                  >
+                    <span><strong>Malayalam translations</strong><small>Show Malayalam meaning buttons in Adhkar.</small></span>
+                    <span className={`toggle-switch ${showMalayalamTranslations ? "on" : ""}`} aria-hidden="true"><i /></span>
                   </button>
                 </section>
                 <section className="settings-card">

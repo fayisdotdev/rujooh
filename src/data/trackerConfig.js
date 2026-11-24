@@ -15,6 +15,7 @@ export const dataStorageKey = "rujooh-tracker-v2";
 export const legacyStorageKey = "rujooh-tracker-v1";
 export const themeStorageKey = "rujooh-theme-v1";
 export const sunnahPreferenceStorageKey = "rujooh-sunnah-preference-v1";
+export const malayalamTranslationsStorageKey = "rujooh-malayalam-translations-v1";
 export const legacySunnahIds = {
   "dhuhr-before-4": "dhuhr-before",
   "dhuhr-after-2": "dhuhr-after",

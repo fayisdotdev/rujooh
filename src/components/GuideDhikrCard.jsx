@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 
-export default function GuideDhikrCard({ item, position, count, done, onIncrement, onDecrement, onMark }) {
+export default function GuideDhikrCard({ item, position, count, done, onIncrement, onDecrement, onMark, showMalayalamTranslations = true }) {
   const [showTransliteration, setShowTransliteration] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
+  const [showMalayalam, setShowMalayalam] = useState(false);
   const transliterationId = `guide-transliteration-${item.id}`;
   const translationId = `guide-translation-${item.id}`;
-  const hasTextDetails = item.transliteration || item.meaning;
+  const malayalamId = `guide-malayalam-${item.id}`;
+  const hasTextDetails = item.transliteration || item.meaning || (showMalayalamTranslations && item.malayalamMeaning);
 
   return (
     <article className={`guide-item ${done ? "done" : ""}`}>
@@ -44,6 +46,18 @@ export default function GuideDhikrCard({ item, position, count, done, onIncremen
                 {showTranslation ? "Hide" : "Show"} translation
               </button>
             )}
+            {showMalayalamTranslations && item.malayalamMeaning && (
+              <button
+                className="guide-text-toggle"
+                type="button"
+                lang="ml"
+                aria-expanded={showMalayalam}
+                aria-controls={malayalamId}
+                onClick={() => setShowMalayalam((shown) => !shown)}
+              >
+                {showMalayalam ? "Hide" : "Show"} Malayalam
+              </button>
+            )}
           </div>
           {item.transliteration && (
             <p className="guide-transliteration" id={transliterationId} dir="auto" hidden={!showTransliteration}>
@@ -53,6 +67,11 @@ export default function GuideDhikrCard({ item, position, count, done, onIncremen
           {item.meaning && (
             <p className="guide-meaning" id={translationId} hidden={!showTranslation}>
               {item.meaning}
+            </p>
+          )}
+          {showMalayalamTranslations && item.malayalamMeaning && (
+            <p className="guide-malayalam" id={malayalamId} lang="ml" hidden={!showMalayalam}>
+              {item.malayalamMeaning}
             </p>
           )}
         </>

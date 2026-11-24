@@ -13,6 +13,7 @@ export default function GuideScreen({
   day,
   changeGuideCount,
   toggle,
+  showMalayalamTranslations,
   adhkarPdfUrl
 }) {
   return (
@@ -83,6 +84,7 @@ export default function GuideScreen({
                   onIncrement={() => changeGuideCount(item.id, 1)}
                   onDecrement={() => changeGuideCount(item.id, -1)}
                   onMark={() => toggle("guideDone", item.id)}
+                  showMalayalamTranslations={showMalayalamTranslations}
                 />
               ))}
             </div>

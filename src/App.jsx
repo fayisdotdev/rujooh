@@ -7,7 +7,8 @@ import {
   statusOptions,
   sunnahPreferenceStorageKey,
   tabs,
-  themeStorageKey
+  themeStorageKey,
+  malayalamTranslationsStorageKey
 } from "./data/trackerConfig.js";
 import { prayers } from "./data/prayers.js";
 import { formatHijriDate, dateKey, fullDate, shiftDate } from "./lib/dates.js";
@@ -52,6 +53,14 @@ function App() {
     }
   });
   const [sunnahPreference, setSunnahPreference] = useState(loadSunnahPreference);
+  const [showMalayalamTranslations, setShowMalayalamTranslations] = useState(() => {
+    try {
+      return localStorage.getItem(malayalamTranslationsStorageKey) !== "false";
+    } catch (error) {
+      console.error("Could not load Rujooh Malayalam preference:", error);
+      return true;
+    }
+  });
   const [notice, setNotice] = useState("");
   const [pendingImport, setPendingImport] = useState(null);
   const locationRequestedOnLoad = useRef(false);
@@ -112,6 +121,15 @@ function App() {
       setNotice("Your Sunnah preference could not be saved.");
     }
   }, [sunnahPreference]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(malayalamTranslationsStorageKey, String(showMalayalamTranslations));
+    } catch (error) {
+      console.error("Could not save Rujooh Malayalam preference:", error);
+      setNotice("Your Malayalam translation preference could not be saved.");
+    }
+  }, [showMalayalamTranslations]);
 
   useEffect(() => {
     if (!notice) return undefined;
@@ -400,6 +418,7 @@ function App() {
             day={day}
             changeGuideCount={changeGuideCount}
             toggle={toggle}
+            showMalayalamTranslations={showMalayalamTranslations}
             adhkarPdfUrl={adhkarPdfUrl}
           />
         )}
@@ -451,6 +470,8 @@ function App() {
             setSunnahPreference={setSunnahPreference}
             theme={theme}
             setTheme={setTheme}
+            showMalayalamTranslations={showMalayalamTranslations}
+            setShowMalayalamTranslations={setShowMalayalamTranslations}
             exportJSON={exportJSON}
             exportCSV={exportCSV}
             importJSON={importJSON}
